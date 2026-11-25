@@ -1,0 +1,1266 @@
+<!doctype html>
+<html lang="da">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Kalender – Affaldsviden (mockup)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap">
+<style>
+  /* Version 2. Farver og mål er aflæst fra Affaldsfeed, Højdepunkter og forsiden på affaldsviden.info (25-11-2026) */
+  :root {
+    --green: #0A602D;
+    --green-hover: #084C24;
+    --green-soft: #E6F4EA;
+    --green-tint: #D4E8C2;
+    --lime: #95C41F;
+    --lime-dark: #5E8A0F;
+    --page: #DAE0E0;
+    --card: #FFFFFF;
+    --ink: #222222;
+    --muted: #565656;
+    --line: #DAE0E0;
+    --line-soft: #E9EDED;
+    --soft: #F4F6F2;
+    --footer: #54595F;
+    --radius: 12px;
+    --shadow: 0 0 0 1px rgba(0, 0, 0, .06), 0 2px 6px rgba(0, 0, 0, .08);
+    --wrap: 880px;
+    color-scheme: light;
+  }
+
+  * { box-sizing: border-box; }
+  body { margin: 0; font-family: "Open Sans", system-ui, -apple-system, "Segoe UI", sans-serif; font-size: 15px; line-height: 1.55; color: var(--ink); background: var(--page); }
+  a { color: var(--green); }
+  button, input { font: inherit; color: inherit; }
+  button { cursor: pointer; }
+  :focus-visible { outline: 3px solid var(--green); outline-offset: 2px; }
+  .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0; }
+  [data-screen][hidden] { display: none; }
+
+  /* ---------- Sidehoved (som i dag, med et nyt menupunkt) ---------- */
+  .site-header { background: #fff; box-shadow: 0 1px 0 rgba(0, 0, 0, .06); position: relative; z-index: 5; }
+  .site-header .inner { max-width: 1180px; height: 90px; margin: 0 auto; padding: 0 24px; display: flex; align-items: center; gap: 20px; }
+  .logo { margin-right: auto; }
+  .logo img { display: block; height: 27px; width: auto; }
+  .main-nav { display: flex; align-self: stretch; }
+  .main-nav a { position: relative; display: flex; align-items: center; gap: 6px; padding: 0 15px; font-size: 17px; color: var(--ink); text-decoration: none; white-space: nowrap; }
+  .main-nav a:hover { color: var(--green); }
+  .main-nav a[aria-current="page"] { background: var(--lime); color: #fff; }
+  .nav-badge { position: absolute; top: 13px; right: 4px; font-size: 11px; line-height: 1; font-weight: 700; color: #fff; background: var(--green); border-radius: 999px; padding: 3px 7px; }
+  .hdr-tools { display: flex; align-items: center; gap: 14px; }
+  .icon-btn { display: inline-grid; place-items: center; width: 40px; height: 40px; border: 0; background: none; color: #555; border-radius: 50%; }
+  .icon-btn:hover { background: rgba(0, 0, 0, .05); }
+  .avatar { width: 42px; height: 42px; border-radius: 50%; display: grid; place-items: center; background: #7884C6; color: #1D2550; font-size: 17px; box-shadow: 0 0 0 2px #E6E8F3; }
+  .burger { display: none; }
+  @media (max-width: 1120px) { .main-nav, .bell { display: none; } .burger { display: inline-grid; } }
+
+  /* ---------- Fælles ---------- */
+  .page { padding: 28px 16px 120px; }
+  .wrap { max-width: var(--wrap); margin: 0 auto; }
+  .card { background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow); }
+  .btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; min-height: 34px; padding: 5px 14px; font-size: 14px; font-weight: 600; line-height: 1.3; text-decoration: none; color: var(--green); background: #fff; border: 1px solid var(--green); border-radius: 999px; }
+  .btn:hover { background: var(--green-soft); }
+  .btn-solid { background: var(--green); color: #fff; }
+  .btn-solid:hover { background: var(--green-hover); border-color: var(--green-hover); }
+  .tlink { display: inline-flex; align-items: center; gap: 5px; padding: 0; border: 0; background: none; font-size: 14px; font-weight: 600; color: var(--green); text-decoration: underline; text-underline-offset: 3px; }
+  .tlink:hover { text-decoration-thickness: 2px; }
+
+  /* ---------- Sidetop: direkte på baggrunden, link til højre for titlen ---------- */
+  .pagehead { margin: 0 0 16px; }
+  .ph-row { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 6px 20px; }
+  .pagehead h1 { margin: 0; font-size: 30px; line-height: 1.2; font-weight: 600; }
+  .pagehead p { margin: 4px 0 0; font-size: 16px; color: var(--muted); }
+  .ph-links { display: flex; align-items: center; gap: 4px; }
+  .ph-links .tlink { text-decoration: none; }
+  .ph-links .tlink:hover { text-decoration: underline; }
+
+  /* Faner som Affaldsfeeds */
+  .viewbar { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+  .pill { display: inline-flex; align-items: center; height: 36px; padding: 0 16px; font-size: 15px; font-weight: 600; letter-spacing: .2px; color: var(--green); background: #fff; border: 1px solid var(--green); border-radius: 999px; }
+  .pill:hover { background: var(--green-soft); }
+  .pill[aria-pressed="true"] { background: var(--green); color: #fff; }
+
+  .panel { overflow: clip; }
+  .foot-tip { margin: 14px 4px 0; font-size: 14px; color: var(--muted); }
+
+  /* ---------- Liste (bygget over Højdepunkter) ---------- */
+  /* Månedsoverskrift: én streg mellem grupperne, ingen bånd */
+  .month-h { position: sticky; top: 0; z-index: 2; margin: 0; height: 40px; padding: 0 20px; display: flex; align-items: center; font-size: 16px; font-weight: 600; background: #fff; }
+  .mgroup + .mgroup .month-h { border-top: 1px solid var(--line); }
+  .mgroup:first-child .month-h { border-radius: var(--radius) var(--radius) 0 0; }
+  .tl { list-style: none; margin: 0; padding: 0 0 8px; }
+  .ev > details > summary { list-style: none; cursor: pointer; }
+  .ev > details > summary::-webkit-details-marker { display: none; }
+  .ev > details > summary:focus-visible { outline-offset: -3px; }
+  /* Række: dato | tekst | pil. Symbol for frist/arrangement kun hvor typerne er blandet (wmk) */
+  .ev-row { display: grid; grid-template-columns: 76px minmax(0, 1fr) 18px; column-gap: 14px; align-items: start; padding: 10px 20px; }
+  .ev > details > summary:hover .ev-row { background: #F7F9F8; }
+  .ev > details > summary:hover .ev-title, .ev > details > summary:hover .chev { color: var(--green); }
+  .ev-date { text-align: right; line-height: 1.3; padding-top: 2px; }
+  .ev-date b { display: block; font-size: 15px; font-weight: 600; white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .ev-date small { display: block; font-size: 12px; color: var(--muted); white-space: nowrap; }
+  /* Slutdato i samme skrift som startdatoen, med "til" foran, så de flugter i højre side */
+  .ev-date .to { display: flex; justify-content: flex-end; align-items: baseline; gap: 4px; }
+  .ev-date .to small { display: inline; }
+  .ev-rail { display: block; }
+  .mark { display: block; margin: 7px auto 0; }
+  .mark.f { width: 9px; height: 9px; background: var(--green); transform: rotate(45deg); border-radius: 1px; }
+  .mark.a { width: 11px; height: 11px; background: #fff; border: 2px solid var(--green); border-radius: 50%; }
+  .ev-main { display: block; min-width: 0; }
+  .ev-title { display: block; font-size: 17px; font-weight: 600; line-height: 1.4; text-wrap: pretty; }
+  .ev-meta { display: block; margin-top: 2px; font-size: 13px; color: var(--muted); }
+  /* Lille valgrække øverst i boksen, samme stil som "Normal | Kompakt" i Affaldsfeed */
+  .ctl { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 18px; padding: 10px 20px; border-bottom: 1px solid var(--line); font-size: 14px; }
+  .ctl[hidden] { display: none; }
+  .ctl .lbl { color: var(--muted); }
+  .ctl button { display: inline-flex; align-items: center; padding: 4px 0; border: 0; border-bottom: 2px solid transparent; background: none; font-size: 14px; font-weight: 600; color: var(--muted); }
+  .ctl button:hover { color: var(--green); }
+  .ctl button[aria-pressed="true"] { color: var(--green); border-bottom-color: var(--green); }
+  .chev { padding-top: 4px; color: #9AA3A0; }
+  .chev svg { display: block; transition: transform .2s ease; }
+  details[open] .chev svg { transform: rotate(180deg); }
+  .ev.past { opacity: .55; }
+
+  .ev-body { padding: 0 20px 18px 110px; }
+  /* "Alle": frister og arrangementer blandet, så en lille symbolkolonne viser typen */
+  .ev-row.wmk { grid-template-columns: 76px 11px minmax(0, 1fr) 18px; }
+  .tl .ev.wmk .ev-body { padding-left: 135px; }
+  .ev-text { margin: 0 0 10px; }
+  .facts { display: grid; grid-template-columns: max-content minmax(0, 1fr); gap: 4px 16px; margin: 0 0 12px; font-size: 14px; }
+  .facts dt { color: var(--muted); }
+  .facts dd { margin: 0; }
+  .links { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 22px; }
+  .status { margin: 8px 0 0; font-size: 13px; color: var(--muted); }
+
+  @media (max-width: 600px) {
+    .month-h { padding: 0 16px; }
+    .ev-row { grid-template-columns: 72px minmax(0, 1fr) 18px; column-gap: 10px; padding: 10px 16px; }
+    .ev-row.wmk { grid-template-columns: 72px 11px minmax(0, 1fr) 18px; }
+    .tl .ev.wmk .ev-body { padding-left: 16px; }
+    .ev-date b { font-size: 14px; }
+    .ctl { padding: 10px 16px; }
+    .ev-body { padding: 0 16px 16px; }
+  }
+
+  /* ---------- Årshjul ---------- */
+  .wheel-wrap { display: grid; grid-template-columns: minmax(0, 1fr) 300px; gap: 12px 24px; padding: 18px 20px 22px; align-items: stretch; }
+  @media (max-width: 820px) { .wheel-wrap { grid-template-columns: minmax(0, 1fr); } }
+  .lg { display: inline-block; margin-right: 6px; vertical-align: 1px; }
+  .lg.f { width: 8px; height: 8px; background: currentColor; transform: rotate(45deg); border-radius: 1px; }
+  .lg.a { width: 10px; height: 10px; border: 2px solid currentColor; border-radius: 50%; }
+  .wheel-box { position: relative; width: 100%; max-width: 520px; margin: 0 auto; aspect-ratio: 1; }
+  .wheel-box svg { display: block; width: 100%; height: 100%; }
+  /* 12 lige store månedsfelter som en urskive; hvert felt viser antal frister og arrangementer */
+  .wheel .slice { cursor: pointer; }
+  .wheel .slice:focus { outline: none; }
+  .wheel .seg { fill: var(--soft); stroke: #fff; stroke-width: 4; }
+  .wheel .slice:hover .seg { fill: #E4ECE3; }
+  .wheel .slice:focus-visible .seg { stroke: var(--lime); stroke-width: 6; }
+  .wheel .slice.sel .seg { fill: var(--green); }
+  .wheel .slabel { font-size: 24px; font-weight: 600; fill: var(--ink); pointer-events: none; }
+  .wheel .scount { font-size: 21px; font-weight: 600; fill: var(--green); pointer-events: none; }
+  .wheel .ic-f { fill: var(--green); pointer-events: none; }
+  .wheel .ic-a { fill: none; stroke: var(--green); stroke-width: 2.5; pointer-events: none; }
+  .wheel .slice.sel .slabel, .wheel .slice.sel .scount { fill: #fff; }
+  .wheel .slice.sel .ic-f { fill: #fff; }
+  .wheel .slice.sel .ic-a { stroke: #fff; }
+  .wheel .cur-outline { fill: none; stroke: var(--lime); stroke-width: 5; pointer-events: none; }
+  .wheel-center { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); width: 38%; text-align: center; pointer-events: none; }
+  .wheel-center .yr { display: flex; align-items: center; justify-content: center; gap: 2px; pointer-events: auto; }
+  .wheel-center .yr b { min-width: 2.4em; font-size: clamp(20px, 3.4vw, 28px); font-weight: 600; line-height: 1.2; }
+  .wheel-center .yr .icon-btn { width: 30px; height: 30px; color: var(--green); }
+  .wheel-center .yr .icon-btn:disabled { opacity: .25; cursor: default; }
+  .wheel-center .ycount span { display: block; font-size: clamp(11px, 3vw, 13px); line-height: 1.4; color: var(--muted); white-space: nowrap; }
+  .mpanel { position: relative; min-width: 0; }
+  /* På brede skærme er månedslisten præcis lige så høj som hjulet og ruller for sig selv,
+     så boksen ikke bliver lang med en tom flade under hjulet. contain: size gør, at listen ikke bestemmer højden. */
+  @media (min-width: 821px) {
+    .mpanel { contain: size; display: flex; flex-direction: column; border-left: 1px solid var(--line); padding-left: 20px; }
+    .mscroll { flex: 1; min-height: 0; overflow-y: auto; overscroll-behavior: contain; padding-right: 6px; scrollbar-width: thin; scrollbar-color: #C3CCC9 transparent; }
+  }
+  .mfade { position: absolute; left: 20px; right: 6px; bottom: 0; height: 48px; background: linear-gradient(rgba(255, 255, 255, 0), #fff 85%); pointer-events: none; opacity: 0; transition: opacity .2s ease; }
+  .mpanel.more .mfade { opacity: 1; }
+  @media (prefers-reduced-motion: reduce) { .mfade { transition: none; } }
+  .mpanel h3 { margin: 2px 0 10px; font-size: 18px; font-weight: 600; }
+  .mlist { list-style: none; margin: 0; padding: 0; border-top: 1px solid var(--line-soft); }
+  .mlist .ev { border-bottom: 1px solid var(--line-soft); }
+  .mlist .ev-row { grid-template-columns: 68px minmax(0, 1fr) 16px; column-gap: 10px; padding: 10px 0; }
+  .mlist .ev-row.wmk { grid-template-columns: 68px 11px minmax(0, 1fr) 16px; }
+  .mlist .ev-date b { font-size: 13px; }
+  .mlist .ev-title { font-size: 15px; }
+  .mlist .ev-body { padding: 0 0 14px; }
+  .mlist .ev > details > summary:hover .ev-row { background: transparent; }
+  .mpanel .none { margin: 16px 0; color: var(--muted); font-size: 14px; }
+
+  /* ---------- Dialoger ---------- */
+  dialog { width: min(520px, calc(100vw - 32px)); max-height: calc(100dvh - 48px); padding: 0; border: 0; border-radius: 12px; color: var(--ink); box-shadow: 0 24px 64px rgba(0, 0, 0, .28); }
+  dialog:modal { overscroll-behavior: contain; }
+  dialog::backdrop { background: rgba(18, 28, 23, .45); overflow: hidden; overscroll-behavior: contain; }
+  .dlg-h { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 14px 16px 14px 22px; border-bottom: 1px solid var(--line); }
+  .dlg-h h1 { margin: 0; font-size: 19px; font-weight: 600; line-height: 1.3; }
+  .dlg-b { padding: 18px 22px 22px; }
+  .dlg-b h2 { margin: 0 0 4px; font-size: 16px; font-weight: 600; }
+  .dlg-b h2:not(:first-child) { margin-top: 20px; }
+  .dlg-b p { margin: 0 0 12px; color: var(--muted); font-size: 14px; text-wrap: pretty; }
+  .dlg-b p:last-child { margin-bottom: 0; }
+  .dlg-b ul { margin: 0 0 12px; padding-left: 20px; font-size: 14px; color: var(--muted); }
+  .dlg-b li + li { margin-top: 4px; }
+  .choice { margin: 0 0 14px; padding: 0; border: 0; }
+  .choice legend { margin-bottom: 6px; padding: 0; font-size: 16px; font-weight: 600; }
+  .choice label { display: flex; align-items: center; gap: 8px; padding: 3px 0; font-size: 15px; cursor: pointer; }
+  .choice input { width: 17px; height: 17px; margin: 0; accent-color: var(--green); }
+  .copyrow { display: flex; gap: 8px; margin-bottom: 12px; }
+  .copyrow input { flex: 1; min-width: 0; height: 36px; padding: 0 10px; font-family: ui-monospace, Consolas, monospace; font-size: 12.5px; border: 1px solid #858D8B; border-radius: 8px; background: var(--soft); }
+  .src-list { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 12px; padding: 0 !important; list-style: none; }
+  .src-list li { margin: 0 !important; font-size: 12px; font-weight: 600; color: var(--green); background: var(--green-soft); border-radius: 999px; padding: 2px 9px; }
+
+  /* ---------- Redaktion ---------- */
+  .tag-int { display: inline-block; margin-left: 6px; padding: 2px 9px; font-size: 12px; font-weight: 700; color: #8A4B00; background: #FFF0D9; border-radius: 999px; vertical-align: middle; }
+  .ph { margin: 0; padding: 14px 20px; font-size: 17px; font-weight: 600; border-bottom: 1px solid var(--line); }
+  .prop { display: grid; gap: 8px; padding: 16px 20px 18px; border-bottom: 1px solid var(--line); }
+  .prop:last-child { border-bottom: 0; }
+  .prop-h { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 10px; font-size: 13px; color: var(--muted); }
+  .ptype { font-weight: 700; color: var(--green); }
+  .prop h3 { margin: 0; font-size: 17px; font-weight: 600; line-height: 1.4; }
+  .prop .facts { margin: 0; }
+  .diff del { color: #9A3B3B; }
+  .diff ins { text-decoration: none; color: var(--green); font-weight: 600; }
+  .prop-actions { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 4px; }
+  .prop.done { opacity: .6; }
+  .prop .result { font-size: 14px; font-weight: 600; color: var(--green); }
+  .src-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+  .src-table th, .src-table td { padding: 8px 20px; text-align: left; border-bottom: 1px solid var(--line-soft); vertical-align: top; }
+  .src-table th { font-size: 12px; font-weight: 600; color: var(--muted); }
+  .src-table tr:last-child td { border-bottom: 0; }
+  .ok, .warn { display: inline-flex; align-items: center; gap: 6px; }
+  .ok::before, .warn::before { content: ""; flex: none; width: 8px; height: 8px; border-radius: 50%; }
+  .ok::before { background: #2E8B57; }
+  .warn::before { background: #D08A00; }
+  .rules { margin: 0; padding: 14px 20px 18px 40px; font-size: 14px; color: var(--muted); }
+  .rules li + li { margin-top: 6px; }
+  .stack { display: grid; gap: 16px; }
+
+  /* ---------- Sidefod ---------- */
+  .site-footer { background: var(--footer); color: #fff; }
+  .site-footer .inner { max-width: 1180px; margin: 0 auto; padding: 20px 24px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+  .site-footer a { color: #fff; text-decoration: none; }
+  .site-footer .c { text-align: center; }
+  .site-footer .r { text-align: right; }
+  @media (max-width: 640px) { .site-footer .inner { grid-template-columns: 1fr; } .site-footer .c, .site-footer .r { text-align: left; } }
+
+  /* ---------- Besked og mockup-panel (ikke en del af designet) ---------- */
+  .toast { position: fixed; left: 50%; bottom: 76px; z-index: 60; transform: translate(-50%, 12px); max-width: calc(100vw - 32px); margin: 0; padding: 10px 18px; border-radius: 999px; font-size: 14px; color: #fff; background: #1F2A24; box-shadow: 0 6px 24px rgba(0, 0, 0, .25); opacity: 0; pointer-events: none; transition: opacity .2s ease, transform .2s ease; }
+  .toast.show { opacity: 1; transform: translate(-50%, 0); }
+  .mockup-bar { position: fixed; right: 16px; bottom: 16px; z-index: 50; display: flex; flex-wrap: wrap; align-items: center; gap: 4px 6px; padding: 8px 10px 8px 16px; border-radius: 999px; background: #1F2A24; color: #fff; font-size: 13px; box-shadow: 0 6px 24px rgba(0, 0, 0, .25); }
+  .mockup-bar strong { margin-right: 6px; font-size: 11px; letter-spacing: .04em; text-transform: uppercase; opacity: .75; }
+  .mockup-bar a, .mockup-bar button { padding: 4px 10px; border: 0; border-radius: 999px; background: transparent; font-size: 13px; color: #CFE7D6; text-decoration: none; }
+  .mockup-bar a:hover, .mockup-bar button:hover { background: rgba(255, 255, 255, .1); }
+  .mockup-bar a[aria-current="true"] { background: #fff; color: #1F2A24; font-weight: 600; }
+  @media (max-width: 640px) { .mockup-bar { left: 16px; border-radius: 16px; } }
+  @media (prefers-reduced-motion: reduce) { .chev svg, .toast { transition: none; } }
+</style>
+</head>
+<body>
+
+<header class="site-header">
+  <div class="inner">
+    <a class="logo" href="https://affaldsviden.info/"><img src="https://affaldsviden.info/wp-content/uploads/2025/09/cropped-AV_logo_RGB_uden_slogan-2048x253-1.png" alt="Affaldsviden"></a>
+    <nav class="main-nav" aria-label="Hovedmenu">
+      <a href="https://affaldsviden.info/om/">Om</a>
+      <a href="https://affaldsviden.info/netvaerk/">Netværk</a>
+      <a href="https://affaldsviden.info/nyheder/">Nyheder</a>
+      <a href="https://affaldsviden.info/affaldsfeed/">Affaldsfeed</a>
+      <a href="#kalender" id="navKalender">Kalender<span class="nav-badge">Nyt</span></a>
+      <a href="https://affaldsviden.info/adgang-for-alle/">For alle</a>
+      <a href="https://affaldsviden.info/">Mine Projekter
+        <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m4 6 4 4 4-4"/></svg></a>
+    </nav>
+    <div class="hdr-tools">
+      <button class="icon-btn bell" type="button" aria-label="Notifikationer">
+        <svg width="22" height="22" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg>
+      </button>
+      <span class="avatar" aria-hidden="true">SN</span>
+      <button class="icon-btn burger" type="button" aria-label="Menu">
+        <svg width="24" height="24" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- ======================= KALENDERSIDEN ======================= -->
+<main class="page" data-screen="kalender">
+  <div class="wrap">
+    <div class="pagehead">
+      <div class="ph-row">
+        <h1 id="k-title">Kalender</h1>
+        <div class="ph-links">
+          <button type="button" class="tlink" data-act="sub">
+            <svg width="16" height="16" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>
+            Abonnér i Outlook</button>
+          <button type="button" class="icon-btn" data-act="aboutcal" aria-label="Om kalenderen">
+            <svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7.5v.5"/></svg>
+          </button>
+        </div>
+      </div>
+      <p id="introText"></p>
+    </div>
+
+    <div class="viewbar" role="group" aria-label="Visning">
+      <button type="button" class="pill" data-view="liste" aria-pressed="true">Frister og arrangementer</button>
+      <button type="button" class="pill" data-view="hjul" aria-pressed="false">Årshjul</button>
+    </div>
+    <p class="sr-only" id="live" aria-live="polite"></p>
+
+    <section class="card panel" aria-labelledby="k-title">
+      <div class="ctl" id="ctlType" role="group" aria-label="Vis">
+        <button type="button" data-type="alle" aria-pressed="true">Alle</button>
+        <button type="button" data-type="frist" aria-pressed="false">Frister</button>
+        <button type="button" data-type="arr" aria-pressed="false">Arrangementer</button>
+      </div>
+      <div class="ctl" id="ctlShow" role="group" aria-label="Vis i årshjulet" hidden>
+        <button type="button" data-wshow="alle" aria-pressed="true">Alle</button>
+        <button type="button" data-wshow="frist" aria-pressed="false"><i class="lg f" aria-hidden="true"></i>Frister</button>
+        <button type="button" data-wshow="arr" aria-pressed="false"><i class="lg a" aria-hidden="true"></i>Arrangementer</button>
+      </div>
+      <div id="viewList"></div>
+      <div id="viewWheel" hidden>
+        <div class="wheel-wrap">
+          <div>
+            <div class="wheel-box">
+              <svg class="wheel" id="wheel" viewBox="0 0 640 640" role="group" aria-label="Årshjul"></svg>
+              <div class="wheel-center">
+                <div class="yr">
+                  <button type="button" class="icon-btn" id="yPrev" aria-label="Forrige år"><svg width="18" height="18" viewBox="0 0 16 16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m10 3-5 5 5 5"/></svg></button>
+                  <b id="yLbl">2027</b>
+                  <button type="button" class="icon-btn" id="yNext" aria-label="Næste år"><svg width="18" height="18" viewBox="0 0 16 16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 3 5 5-5 5"/></svg></button>
+                </div>
+                <div class="ycount" id="yCount"></div>
+              </div>
+            </div>
+          </div>
+          <div class="mpanel" id="mpanel" aria-live="polite"></div>
+        </div>
+      </div>
+    </section>
+    <p class="foot-tip">Mangler der en frist eller et arrangement? Skriv til os på <a href="mailto:jhn@jhn.dk">jhn@jhn.dk</a>.</p>
+  </div>
+</main>
+
+<!-- ======================= REDAKTION ======================= -->
+<main class="page" data-screen="redaktion" hidden>
+  <div class="wrap">
+    <div class="pagehead">
+      <div class="ph-row"><h1 id="r-title">Redaktion: kalender <span class="tag-int">Kun for Affaldsviden</span></h1></div>
+      <p id="runInfo"></p>
+    </div>
+    <div class="stack">
+      <section class="card panel" aria-labelledby="prop-title">
+        <h2 class="ph" id="prop-title">Forslag til godkendelse</h2>
+        <div id="props"></div>
+      </section>
+      <section class="card panel" aria-labelledby="rules-title">
+        <h2 class="ph" id="rules-title">Sådan virker det</h2>
+        <ul class="rules">
+          <li>Hver morgen kl. 6 tjekker en automatisk kørsel kilderne nedenfor og foreslår nye og ændrede datoer.</li>
+          <li>Nye og ændrede frister kommer først i kalenderen, når en af os har godkendt dem.</li>
+          <li>Arrangementer fra faste arrangører kommer i kalenderen med det samme.</li>
+          <li>Når en godkendt dato flytter sig, opdaterer abonnementerne i Outlook sig selv.</li>
+        </ul>
+      </section>
+      <section class="card panel" aria-labelledby="src-title">
+        <h2 class="ph" id="src-title">Overvågede kilder</h2>
+        <table class="src-table">
+          <thead><tr><th scope="col">Kilde</th><th scope="col">Hentes via</th><th scope="col">Status</th></tr></thead>
+          <tbody id="srcTable"></tbody>
+        </table>
+      </section>
+    </div>
+  </div>
+</main>
+
+<footer class="site-footer">
+  <div class="inner">
+    <div><a href="mailto:jhn@jhn.dk">jhn@jhn.dk</a><br>2622 2727</div>
+    <div class="c">Orla Lehmannsgade 5<br>7100 Vejle</div>
+    <div class="r">Affaldsviden.dk<br><a href="https://affaldsviden.info/">Privatlivspolitik</a></div>
+  </div>
+</footer>
+
+<!-- ======================= DIALOGER ======================= -->
+<dialog id="subDlg" aria-labelledby="subTitle" closedby="any">
+  <div class="dlg-h">
+    <h1 id="subTitle">Abonnér i Outlook</h1>
+    <button type="button" class="icon-btn" data-close aria-label="Luk"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+  </div>
+  <div class="dlg-b">
+    <fieldset class="choice">
+      <legend>Hvad vil du have med?</legend>
+      <label><input type="radio" name="subwhat" value="frist" checked> Frister</label>
+      <label><input type="radio" name="subwhat" value="arr"> Arrangementer</label>
+      <label><input type="radio" name="subwhat" value="alle"> Frister og arrangementer</label>
+    </fieldset>
+    <div class="copyrow">
+      <input id="subUrl" readonly aria-label="Abonnementslink">
+      <button type="button" class="btn" id="copySub" autofocus>Kopiér link</button>
+    </div>
+    <p>I Outlook vælger du Tilføj kalender og derefter at abonnere fra internettet. Nye og flyttede datoer kommer automatisk med.</p>
+    <p>Vil du hellere have fristerne på mail, kan du tilmelde dig vores nyhedsbrev <a href="https://affaldsviden.info/tilmeld-nyhedsbrev/" target="_blank" rel="noopener">her</a>.</p>
+  </div>
+</dialog>
+
+<dialog id="calDlg" aria-labelledby="calTitle" closedby="any">
+  <div class="dlg-h">
+    <h1 id="calTitle">Om kalenderen</h1>
+    <button type="button" class="icon-btn" data-close aria-label="Luk" autofocus><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18"/></svg></button>
+  </div>
+  <div class="dlg-b">
+    <p>Kalenderen samler de frister, kommuner og affaldsselskaber skal overholde, og arrangementer på affaldsområdet.</p>
+    <h2>Sådan holder vi den opdateret</h2>
+    <p>Hver morgen tjekker vi kilderne for nye og ændrede datoer. Nye og ændrede frister bliver godkendt af en medarbejder hos Affaldsviden, før de kommer i kalenderen. Ved hvert punkt kan du gå direkte til kilden.</p>
+    <h2>Forventede datoer</h2>
+    <p>Nogle datoer står kun i et udkast eller er ikke meldt ud endnu. De er markeret med forventet dato, indtil afsenderen bekræfter dem.</p>
+    <h2>Kilder</h2>
+    <ul class="src-list" id="srcList"></ul>
+  </div>
+</dialog>
+
+
+<p class="toast" id="toast" role="status" aria-live="polite"></p>
+
+<nav class="mockup-bar" aria-label="Mockup">
+  <strong>Mockup v3</strong>
+  <a href="#kalender" data-mock="kalender">Kalenderside</a>
+  <a href="#redaktion" data-mock="redaktion">Redaktion</a>
+</nav>
+
+<script>
+'use strict';
+
+/* =====================================================================
+   INDHOLD (research 25-11-2026; skal kvalitetssikres før offentliggørelse)
+   type: 'frist' eller 'arr'. for: hvem fristen gælder for (vises under titlen).
+   every: 'år' = fast årlig frist, som også vises i årshjulet for de følgende år.
+   approx: true = kun måneden kendes. signupBy: sidste tilmeldingsdag.
+   ===================================================================== */
+const RI = (y, n) => ({ name: 'Retsinformation', url: `https://www.retsinformation.dk/eli/lta/${y}/${n}` });
+const HOERING_EMB = { name: 'Høringsportalen', url: 'https://hoeringsportalen.dk/Hearing/Details/71716' };
+const UDKAST = 'udkastet til ændring af emballagebekendtgørelsen';
+
+/* ITEMS-START */
+const ITEMS = [
+  /* ---------- Frister ---------- */
+  {
+    id: 'mineraluld', type: 'frist', date: '2027-01-01', for: 'Deponier',
+    title: 'Deponering af mineraluld: midlertidig praksis udløber',
+    todo: 'Miljøstyrelsens midlertidige guide til klassificering af tæt emballeret glasuld og lovlige blandinger af mineraluld gælder frem til 1. januar 2027. Hold øje med, hvad der afløser den.',
+    src: { name: 'DAKOFA', url: 'https://dakofa.dk/nyhed/guide-om-klassificering-af-mineraluld' }, status: 'bekraeftet',
+  },
+  {
+    id: 'upa-periode', type: 'frist', date: '2027-01-01', for: 'Kommuner',
+    title: 'Emballage: ny tildelingsperiode for producentgebyrer',
+    todo: 'Den toårige tildelingsperiode for 2027 og 2028 begynder. Kommunen opkræver gebyrer hos de producenter, som Dansk Producentansvar har tildelt den.',
+    note: 'Udkastet til ændring af emballagebekendtgørelsen indfører samtidig lofter for, hvad kommunen kan opkræve pr. ton. Lofterne afhænger af lovforslag L 93, som efter planen bliver 3. behandlet i Folketinget 17. december 2026. Omkostninger over loftet skal dækkes af affaldsgebyret.',
+    law: 'BEK nr. 851 af 28/09/2026 §§ 31-32', src: RI(2026, 851), status: 'bekraeftet',
+  },
+  {
+    id: 'mbl-46b', type: 'frist', date: '2027-01-01', for: 'Kommunale genanvendelsesanlæg',
+    title: 'Ældre kommunale anlæg må ikke længere behandle erhvervsaffald',
+    todo: 'Miljøbeskyttelseslovens § 46 b ophæves. Kommunale genanvendelsesanlæg, der er etableret før 26. februar 2009, mister dermed hjemlen til at behandle genanvendeligt erhvervsaffald.',
+    law: 'Lov nr. 898 af 2022 § 3, stk. 2', src: RI(2022, 898), status: 'bekraeftet',
+  },
+  {
+    id: 'prisloft-aftaler', type: 'frist', date: '2027-01-01', for: 'Forbrændingsanlæg',
+    title: 'Affaldsvarme: prisloftet gælder også ældre aftaler',
+    todo: 'Prisloftet for affaldsvarme gælder fra 1. januar 2027 også leveringsaftaler, der er indgået før 1. oktober 2024.',
+    note: 'Energistyrelsen melder loftet for det kommende år ud senest 1. november. Et udkast om at ophæve overgangsordningen for anlæg med nye investeringer var i høring til 17. november 2026.',
+    law: 'BEK nr. 1479 af 2025 §§ 10 og 15', src: RI(2025, 1479), status: 'bekraeftet',
+  },
+  {
+    id: 'ads-2026', type: 'frist', date: '2027-02-01', every: 'år', for: 'Affaldsselskaber og anlæg',
+    title: 'ADS: indberetning af affaldsdata for 2026',
+    todo: 'Modtage- og behandlingsanlæg, registrerede indsamlere, importører og eksportører indberetter og retter data for 2026 i Affaldsdatasystemet. Kommunen står som affaldsproducent for husholdningsaffaldet.',
+    note: 'Fristen var tidligere 1. marts. Fra 2026-data gælder nye fraktionskoder, fx for elbil- og LMT-batterier, glasuld, stenuld og asbest.',
+    law: 'BEK nr. 1465 af 28/11/2025 §§ 5-7', src: RI(2025, 1465), status: 'bekraeftet',
+  },
+  {
+    id: 'upa-gebyrblad-2027', type: 'frist', date: '2027-02-01', for: 'Kommuner',
+    title: 'Emballage: gebyrblad og opkrævning for 2027',
+    todo: 'Kommunen fastsætter producentgebyrerne for 2027 pr. fraktion og ordning, lægger gebyrbladet på hjemmesiden som regneark og opkræver 1. kvartal. Efterreguleringen for 1. oktober 2025 til 31. december 2026 opkræves i 16 kvartalsrater.',
+    note: 'Efter den gældende bekendtgørelse skulle opkrævningen ske 1. januar 2027. Datoen 1. februar står i udkastet til ændring.',
+    law: 'Udkast til ændring af emballagebekendtgørelsen §§ 104-107', src: HOERING_EMB, status: 'forventet', basis: UDKAST,
+  },
+  {
+    id: 'ads-fejl', type: 'frist', date: '2027-03-01', every: 'år', for: 'Kommuner og affaldsselskaber',
+    title: 'ADS: frist for at melde fejl i egne data',
+    todo: 'Affaldsproducenter gennemgår de data, der er indberettet om dem, og melder fejl. Kommunen gør det for husholdningsaffaldet. For farligt affald gælder fristen også transportører, forhandlere og mæglere.',
+    law: 'BEK nr. 1465 af 28/11/2025 § 11, stk. 1-2, og § 13', src: RI(2025, 1465), status: 'bekraeftet',
+  },
+  {
+    id: 'prtr-2026', type: 'frist', date: '2027-03-01', for: 'Forbrændingsanlæg og deponier',
+    title: 'PRTR: indberetning af udledninger for 2026',
+    todo: 'PRTR-anlæg indberetter udledninger og affaldsmængder for 2026. Det er sidste gang efter de nuværende E-PRTR-regler.',
+    note: 'Tilsynsmyndigheden udtaler sig senest 1. april, anlægget retter senest 1. maj, og tilsynet afslutter senest 1. juni. Fra data for 2027 gælder EU\'s nye portalforordning, som også omfatter vand, energi og råvarer.',
+    law: 'BEK nr. 1941 af 2021 §§ 4 og 8', src: RI(2021, 1941), status: 'bekraeftet',
+  },
+  {
+    id: 'ads-kvalitet', type: 'frist', from: '2027-02-02', date: '2027-03-30', every: 'år', for: 'Kommuner',
+    title: 'ADS: kommunernes kvalitetssikring',
+    todo: 'Kommunen kan gennemgå og rette de indberettede data for virksomhederne i kommunen. Der er ingen pligt til at godkende eller svare.',
+    note: 'Perioden var tidligere 2. marts til 30. juni.',
+    law: 'BEK nr. 1465 af 28/11/2025 § 11, stk. 3', src: RI(2025, 1465), status: 'bekraeftet',
+  },
+  {
+    id: 'ets-rapport', type: 'frist', date: '2027-03-31', every: 'år', for: 'Kvoteomfattede forbrændingsanlæg',
+    title: 'CO2-kvoter: emissionsrapport for 2026',
+    todo: 'Anlægget indsender den verificerede emissionsrapport og rapporten om aktivitetsniveau for gratiskvoter. Ellers bliver kvotekontoen spærret for handel.',
+    note: 'De fleste danske forbrændingsanlæg over 20 MW har været omfattet af kvotesystemet siden 2013.',
+    law: 'Forordning (EU) 2019/1842 art. 3', src: { name: 'Erhvervsstyrelsen', url: 'https://erhvervsstyrelsen.dk/returnering-compliance' }, status: 'bekraeftet',
+  },
+  {
+    id: 'upa-opgoerelse', type: 'frist', date: '2027-04-01', for: 'Kommuner',
+    title: 'Emballage: opgørelse til Energistyrelsen',
+    todo: 'Kommunen sender de faktiske omkostninger og de indsamlede tons pr. fraktion, delt på hente- og bringeordninger, til Energistyrelsen på styrelsens skabelon. Opgørelsen skal også offentliggøres.',
+    note: 'Den gældende bekendtgørelse (BEK nr. 851 § 104) siger 1. maj. Udkastet til ændring rykker fristen til 1. april.',
+    law: 'Udkast til ændring af emballagebekendtgørelsen § 109', tpl: { name: 'Energistyrelsens skabelon (kommer i skabelonbanken)' },
+    src: HOERING_EMB, status: 'forventet', basis: UDKAST,
+  },
+  {
+    id: 'upa-dpa-ordninger', type: 'frist', date: '2027-05-31', every: 'år', for: 'Kommuner',
+    title: 'Emballage: oplys ordninger til Dansk Producentansvar',
+    todo: 'Kommunen oplyser sine egne og fælleskommunale indsamlingsordninger for emballage og de ændringer, der er planlagt. Fristen er før 1. juni.',
+    law: 'BEK nr. 851 af 28/09/2026 § 26', src: RI(2026, 851), status: 'bekraeftet',
+  },
+  {
+    id: 'deponi-benchmark', type: 'frist', date: '2027-06-01', every: 'år', for: 'Deponier',
+    title: 'Deponi: benchmarkingdata til Forsyningstilsynet',
+    todo: 'Deponeringsanlæg indsender data til Forsyningstilsynets benchmarking.',
+    law: 'BEK nr. 493 af 2024 § 3', src: RI(2024, 493), status: 'bekraeftet',
+  },
+  {
+    id: 'batteri-dpa', type: 'frist', date: '2027-06-30', every: 'år', for: 'Affaldsselskaber og anlæg',
+    title: 'Batterier: indberetning af mængder for 2026',
+    todo: 'Affaldsoperatører og behandlingsanlæg indberetter de mængder batterier, de har indsamlet eller behandlet i 2026, til Dansk Producentansvar.',
+    note: 'Siden 18. august 2025 må kommuner kun indsamle batterier med en skriftlig kontrakt med en producent eller producentorganisation.',
+    law: 'Batteriforordningen (EU) 2023/1542 art. 75, stk. 7, og BEK nr. 986 af 2025 § 15', src: RI(2025, 986), status: 'bekraeftet',
+  },
+  {
+    id: 'av-aarsdata', type: 'frist', from: '2027-02-01', date: '2027-06-30', for: 'Kommuner og affaldsselskaber',
+    title: 'Affaldsviden: send årsdata for 2026',
+    todo: 'Send jeres affaldsdata for 2026 til Affaldsviden, så nøgletallene kan opdateres og sammenlignes med de andre kommuner.',
+    note: 'Affaldsviden fastsætter de præcise datoer.',
+    src: { name: 'Affaldsviden', url: 'https://affaldsviden.info/' }, status: 'forventet', basis: 'planen om dataindsamling fra februar til juni',
+  },
+  {
+    id: 'mbl-49g', type: 'frist', date: '2027-07-01', for: 'Kommuner med sorterings- eller genanvendelsesanlæg',
+    title: 'Overgangsordning for kommunale sorteringsanlæg slutter',
+    todo: 'Kommuner, der stadig deltager i anlæg til sortering eller genanvendelse efter overgangsordningen, skal være ude, og de udskilte selskaber skal være afhændet.',
+    note: 'Ministeren kan udskyde fristen, men der er ikke fundet nogen udskydelse.',
+    law: 'Lov nr. 898 af 2022 § 3, stk. 5, miljøbeskyttelseslovens §§ 49 g-h og BEK nr. 1743 af 2024 §§ 49-51',
+    src: { name: 'Energistyrelsen', url: 'https://ens.dk/media/25/download' }, status: 'bekraeftet',
+  },
+  {
+    id: 'ied-ems', type: 'frist', date: '2027-07-01', for: 'Forbrændingsanlæg og andre IED-anlæg',
+    title: 'IED-anlæg: miljøledelsessystem skal være på plads',
+    todo: 'Anlægget skal have indført et miljøledelsessystem, og det skal være auditeret første gang. Derefter auditeres det mindst hvert tredje år.',
+    note: 'Datoen står i EU-direktivet. Den danske gennemførelse er ikke tjekket.',
+    law: 'Direktiv (EU) 2024/1785, IED art. 14a', src: { name: 'EUR-Lex', url: 'https://eur-lex.europa.eu/eli/dir/2024/1785/oj' }, status: 'bekraeftet',
+  },
+  {
+    id: 'ft-regnskab', type: 'frist', date: '2027-07-15', every: 'år', for: 'Kommunale anlæg med genanvendeligt erhvervsaffald',
+    title: 'Forsyningstilsynet: særskilte regnskaber for erhvervsaffald',
+    todo: 'Anlægget sender det særskilte regnskab og de opkrævede priser til Forsyningstilsynet.',
+    law: 'BEK nr. 1743 af 2024 §§ 47-48', src: RI(2024, 1743), status: 'bekraeftet',
+  },
+  {
+    id: 'ets-returnering', type: 'frist', date: '2027-09-30', every: 'år', for: 'Kvoteomfattede forbrændingsanlæg',
+    title: 'CO2-kvoter: returnering for 2026',
+    todo: 'Anlægget returnerer kvoter svarende til udledningen i 2026. Hver manglende kvote koster en bod på 100 euro.',
+    src: { name: 'Erhvervsstyrelsen', url: 'https://erhvervsstyrelsen.dk/returnering-compliance' }, status: 'bekraeftet',
+  },
+  {
+    id: 'budget-2028', type: 'frist', date: '2027-10-15', every: 'år', for: 'Kommuner',
+    title: 'Budget 2028 og affaldsgebyrer vedtages',
+    todo: 'Kommunalbestyrelsen vedtager budgettet for 2028 ved 2. behandling. Affaldsgebyrerne vedtages typisk samtidig og skal derefter stå på kommunens hjemmeside.',
+    note: 'Økonomiudvalget sender budgetforslaget til kommunalbestyrelsen senest 15. september. Reglerne giver ingen fast dato for gebyrbladet for affaldsgebyrer.',
+    law: 'BEK nr. 998 af 2025 § 2 og BEK nr. 1743 af 2024 § 15', src: RI(2025, 998), status: 'bekraeftet',
+  },
+  {
+    id: 'upa-gebyrblad-2028', type: 'frist', date: '2027-10-15', every: 'år', for: 'Kommuner',
+    title: 'Emballage: gebyrblad for 2028',
+    todo: 'Kommunen fastsætter producentgebyrerne for 2028 og lægger gebyrbladet på hjemmesiden.',
+    note: 'Hvis udkastet til ændring af emballagebekendtgørelsen bliver vedtaget, offentliggør Energistyrelsen de fremskrevne lofter senest 1. juli.',
+    law: 'BEK nr. 851 af 28/09/2026 § 101', src: RI(2026, 851), status: 'bekraeftet',
+  },
+  {
+    id: 'ens-kapacitet', type: 'frist', date: '2027-11-01', every: 'år', for: 'Forbrændingsanlæg',
+    title: 'Forbrændingskapacitet: indberetning til Energistyrelsen',
+    todo: 'Anlægget sender oplysningerne i bekendtgørelsens bilag 4 til Energistyrelsen.',
+    law: 'BEK nr. 1743 af 2024 § 53', src: RI(2024, 1743), status: 'bekraeftet',
+  },
+  {
+    id: 'tekstil-epr', type: 'frist', date: '2028-04-17', for: 'Kommuner og affaldsselskaber',
+    title: 'Tekstiler: producentansvaret skal være på plads',
+    todo: 'Producenterne skal betale for indsamling og behandling af tekstiler og fodtøj og må ikke afvise, at kommunerne deltager i indsamlingen.',
+    note: 'Danmark skal have gennemført de nye EU-regler senest 17. juni 2027. Der er endnu ikke fundet et dansk lovforslag.',
+    law: 'Direktiv (EU) 2025/1892, art. 22a, stk. 14, og art. 22c, stk. 8-10', src: { name: 'EUR-Lex', url: 'https://eur-lex.europa.eu/eli/dir/2025/1892/oj' }, status: 'bekraeftet',
+  },
+  {
+    id: 'udbud-forbraending', type: 'frist', date: '2028-07-01', for: 'Kommuner med kontrakt med eget forbrændingsanlæg',
+    title: 'Forbrænding: kontrakter skal følge de nye udbudsregler',
+    todo: 'Kommuner, der før 1. juli 2023 udbød og indgik kontrakt med deres eget forbrændingsanlæg, skal have en kontrakt efter de nye udbudsregler. Fraviger kommunen Forsyningstilsynets konkurrencetiltag, skal det indberettes.',
+    law: 'Miljøbeskyttelseslovens § 45 e, stk. 3, og § 45 f', src: RI(2026, 842), status: 'bekraeftet',
+  },
+  {
+    id: 'ppwr-maerker', type: 'frist', date: '2028-08-12', for: 'Kommuner og affaldsselskaber',
+    title: 'Emballage: EU-mærker på alle beholdere',
+    todo: 'Beholdere til emballageaffald skal have EU\'s fælles mærker. Fristen er tidligst 12. august 2028 og ellers 30 måneder efter, at Kommissionen har vedtaget reglerne for mærkerne.',
+    note: 'Kommissionen skulle vedtage reglerne senest 12. august 2026, men har ikke gjort det endnu. Andre kilder nævner 2. kvartal 2027.',
+    law: 'Emballageforordningen (EU) 2025/40 art. 13',
+    src: { name: 'Europa-Kommissionen', url: 'https://green-forum.ec.europa.eu/green-business/packaging-and-packaging-waste-regulation-implementation_en' },
+    status: 'forventet', basis: 'emballageforordningen. Den endelige dato afhænger af Kommissionen',
+  },
+
+  /* ---------- Arrangementer ---------- */
+  {
+    id: 'ewwr-2026', type: 'arr', date: '2026-11-21', end: '2026-11-29', org: 'EWWR', place: 'Lokale aktioner',
+    title: 'Europæisk uge for affaldsreduktion', audience: 'Kommuner, affaldsselskaber og borgere',
+    todo: 'Årets tema er Material Sufficiency. Kommuner og affaldsselskaber kan lave aktioner og kommunikation om at undgå affald.',
+    url: 'https://ewwr.eu', status: 'bekraeftet',
+  },
+  {
+    id: 'dakofa-net-bygge', type: 'arr', date: '2026-12-01', org: 'DAKOFA', place: 'København V',
+    title: 'Netværksmøde: bygge- og anlægsaffald', audience: 'Netværkets medlemmer',
+    todo: 'Møde i DAKOFA\'s netværk for bygge- og anlægsaffald og cirkulært byggeri, som mødes cirka fire gange om året.',
+    url: 'https://dakofa.dk/netvaerk/netvaerk-for-bygge-og-anlaegsaffald-og-cirkulaert-byggeri', status: 'bekraeftet',
+  },
+  {
+    id: 'dakofa-net-tekstil', type: 'arr', date: '2026-12-03', org: 'DAKOFA', place: 'København V',
+    title: 'Netværksmøde: cirkulære tekstiler', audience: 'Netværkets medlemmer',
+    todo: 'Møde i DAKOFA\'s netværk for cirkulære tekstiler, som mødes tre til fire gange om året.',
+    url: 'https://dakofa.dk/netvaerk/netvaerk-for-cirkulaere-tekstiler', status: 'bekraeftet',
+  },
+  {
+    id: 'cirk-fagdage', type: 'arr', date: '2026-12-03', end: '2026-12-04', org: 'Cirkulær', place: 'Hotel Vejlefjord',
+    title: 'Cirkulære Fagdage 2026', audience: 'Kommuner og affaldsselskaber',
+    price: '7.450 kr. for begge dage, 4.250 kr. for én dag', signup: 'Fristen var 6. november',
+    todo: 'Fagdage for kommuner og affaldsselskaber med temaet Fremtiden kommer!',
+    url: 'https://cirkulaer.dk/arrangementer/cirkulaere-fagdage-2026-fremtiden-kommer', status: 'bekraeftet',
+  },
+  {
+    id: 'dakofa-batterier', type: 'arr', date: '2026-12-07', org: 'DAKOFA', place: 'Online', signupBy: '2026-12-07',
+    title: 'Webinar: batterier og brande i affaldet', audience: 'Kommuner og affaldsselskaber',
+    price: '400 kr. for medlemmer, 1.500 kr. for andre',
+    todo: 'Webinar om batterier og engangs-e-cigaretter i affaldet, og om hvordan man undgår brande.',
+    url: 'https://dakofa.dk/arrangement/batterier-og-puffbars-i-affaldet-hvordan-forebygger-vi-brandene-question-mark', status: 'bekraeftet',
+  },
+  {
+    id: 'dakofa-net-emballage', type: 'arr', date: '2026-12-09', org: 'DAKOFA',
+    title: 'Netværksmøde: emballage og plast', audience: 'Netværkets medlemmer',
+    todo: 'Møde i DAKOFA\'s netværk for cirkulær emballage og plast.',
+    url: 'https://dakofa.dk/netvaerk/netvaerk-for-cirkulaer-emballage-og-plast', status: 'bekraeftet',
+  },
+  {
+    id: 'affaldsdatadag-2027', type: 'arr', date: '2027-01-14', org: 'Cirkulær og JHN Processor', place: 'Spinderihallerne, Vejle',
+    title: 'Affaldsdatadag 2027', audience: 'Kommuner og affaldsselskaber',
+    price: '2.650 kr. for medlemmer af Affaldsviden eller Cirkulær. Andre kan deltage en halv dag for 3.650 kr.',
+    signup: 'Tilmeldingen er bindende fra 1. december',
+    todo: 'Dagen handler om dataflow, producentansvar og dataværktøjer. Der er også en session kun for medlemmer af Affaldsviden.',
+    url: 'https://cirkulaer.dk/arrangementer/affaldsdatadag-2027', status: 'bekraeftet',
+  },
+  {
+    id: 'dakofa-forbraending', type: 'arr', date: '2027-01-19', org: 'DAKOFA', place: 'Online',
+    title: 'Webinar: nye spilleregler for affaldsforbrænding', audience: 'Affaldssektoren', price: '475 kr. for medlemmer, 1.650 kr. for andre',
+    url: 'https://dakofa.dk/arrangement/nye-spilleregler-for-affaldsforbraending-virker-de-efter-hensigten-question-mark', status: 'bekraeftet',
+  },
+  {
+    id: 'dakofa-deponering', type: 'arr', date: '2027-01-21', org: 'DAKOFA', place: 'Online',
+    title: 'Webinar: deponering under pres', audience: 'Affaldssektoren', price: '475 kr. for medlemmer, 1.650 kr. for andre',
+    url: 'https://dakofa.dk/arrangement/deponering-under-pres-er-reglerne-fulgt-med-virkeligheden-question-mark', status: 'bekraeftet',
+  },
+  {
+    id: 'dakofa-udbud', type: 'arr', date: '2027-01-26', end: '2027-01-27', org: 'DAKOFA', place: 'Bech-Bruun, Aarhus',
+    title: 'Kursus: udbud og kontraktopfølgning', audience: 'Udbydere og tilbudsgivere', price: '4.500 kr. for medlemmer, 10.500 kr. for andre',
+    url: 'https://dakofa.dk/arrangement/en-god-udbudsproces-og-en-fair-kontraktopfoelgning-3', status: 'bekraeftet',
+  },
+  {
+    id: 'fvc-affaldsjura', type: 'arr', date: '2027-02-01', org: 'Ferskvandscentret', place: 'Silkeborg', signupBy: '2027-01-08',
+    title: 'Kursus: affaldsjura for miljøsagsbehandlere', audience: 'Kommunale sagsbehandlere', price: '4.780 kr.',
+    url: 'https://fvc-kursus.dk/kurser/industrimiljoe/affaldsjura-for-miljoesagsbehandlere-598/', status: 'bekraeftet',
+  },
+  {
+    id: 'fvc-genbrugsvejledere', type: 'arr', date: '2027-02-03', org: 'Ferskvandscentret', place: 'Silkeborg', signupBy: '2027-01-08',
+    title: 'Træf for genbrugsvejledere 2027', audience: 'Personale på genbrugspladser', price: '2.845 kr.',
+    url: 'https://fvc-kursus.dk/kurser/affald-og-genbrug/traef-for-genbrugsvejledere-2027-241/', status: 'bekraeftet',
+  },
+  {
+    id: 'dakofa-klima', type: 'arr', date: '2027-02-04', end: '2027-02-05', org: 'DAKOFA', place: 'København V', signupBy: '2027-02-02',
+    title: 'Kursus: klimaberegninger', audience: 'Kommuner og rådgivere', price: '5.675 kr. for medlemmer, 11.750 kr. for andre',
+    url: 'https://dakofa.dk/arrangement/klimaberegninger-fra-klimatal-til-robuste-beslutningsgrundlag', status: 'bekraeftet',
+  },
+  {
+    id: 'cirk-topmoede', type: 'arr', date: '2027-03-01', approx: true, org: 'Cirkulær',
+    title: 'Cirkulært Topmøde 2027', audience: 'Kommuner og affaldsselskaber', last: 'I 2026 var det 24.-25. marts på Hotel Nyborg Strand.',
+    todo: 'Brancheforeningen Cirkulærs årsmøde og konference.',
+    url: 'https://cirkulaer.dk/cirkulaert-topmoede-2026', status: 'forventet', basis: 'datoen i 2026',
+  },
+  {
+    id: 'verdis-visioner', type: 'arr', date: '2027-03-04', org: 'Verdis', place: 'D15, København',
+    title: 'Verdis Visioner 2027', audience: 'Kommuner og forsyninger', price: '390 kr. for offentligt ansatte, 1.490 kr. for private',
+    todo: 'Konference holdt af indsamlingsfirmaet Verdis A/S.',
+    url: 'https://verdis.dk/konference-2027/', status: 'bekraeftet',
+  },
+  {
+    id: 'dakofa-sortering', type: 'arr', date: '2027-04-01', approx: true, org: 'DAKOFA',
+    title: 'Årets Sorteringskonference', audience: 'Kommuner og affaldsselskaber', last: 'I 2026 var det 9. april i Aarhus.',
+    url: 'https://dakofa.dk/arrangement/aarets-sorteringskonference-2026', status: 'forventet', basis: 'datoen i 2026',
+  },
+  {
+    id: 'dn-affaldsindsamling', type: 'arr', date: '2027-04-12', end: '2027-04-18', org: 'Danmarks Naturfredningsforening', place: 'Hele landet',
+    title: 'Affaldsindsamlingen 2027', audience: 'Borgere, skoler og kommuner', price: 'Gratis',
+    todo: 'Landsdækkende indsamling af affald i naturen.',
+    url: 'https://affaldsindsamlingen.dk', status: 'bekraeftet',
+  },
+  {
+    id: 'cirk-forsyningsjura', type: 'arr', date: '2027-04-21', end: '2027-04-22', org: 'Cirkulær', place: 'DANVA, Skanderborg',
+    title: 'Kursus: forsyningsjura, modul Affald', audience: 'Jurister og ledere i forsyninger', price: '8.150 kr. for medlemmer, 9.150 kr. for andre',
+    url: 'https://cirkulaer.dk/arrangementer/forsyningsjura-affald-2027', status: 'bekraeftet',
+  },
+  {
+    id: 'kl-topmoede', type: 'arr', date: '2027-04-29', end: '2027-04-30', org: 'KL',
+    title: 'Klima & Miljø Topmøde', audience: 'Kommunalpolitikere og forvaltninger', note: 'Værtskommunen er ikke meldt ud. Datoen står i et notat fra KL.',
+    url: 'https://www.kk.dk/sites/default/files/agenda/a3b74b2b-c1d9-4a79-9244-f299da308e45/6f2e01b9-f54f-4f8b-99c4-03350ee77a21-bilag-3_0.pdf', status: 'bekraeftet',
+  },
+  {
+    id: 'cirk-ledelseskreds', type: 'arr', date: '2027-05-27', end: '2027-05-28', org: 'Cirkulær', place: 'Hotel Hesselet, Nyborg',
+    title: 'Ledelseskredsmøde, forår 2027', audience: 'Ledelser hos Cirkulærs medlemmer',
+    url: 'https://cirkulaer.dk/arrangementer/ledelskredsmoede-foraar-2027', status: 'bekraeftet',
+  },
+  {
+    id: 'dakofa-aarskonf', type: 'arr', date: '2027-09-01', approx: true, org: 'DAKOFA',
+    title: 'DAKOFA\'s årskonference', audience: 'Affaldssektoren', last: 'I 2026 var det 23.-24. september.',
+    url: 'https://dakofa.dk/arrangement/dakofas-aarskonference', status: 'forventet', basis: 'datoen i 2026',
+  },
+  {
+    id: 'iswa-2027', type: 'arr', date: '2027-09-27', end: '2027-09-29', org: 'ISWA', place: 'Rotterdam',
+    title: 'ISWA World Congress 2027', audience: 'Den internationale affaldssektor',
+    url: 'https://www.iswa.org/event/2027-iswa-world-congress/', status: 'bekraeftet',
+  },
+  {
+    id: 'madspild-dag', type: 'arr', date: '2027-09-29', every: 'år', org: 'FN',
+    title: 'FN\'s dag for madspild', audience: 'Borgere',
+    todo: 'Temadag om madspild, som kan bruges i kommunikationen om madaffald.',
+    url: 'https://www.un.org/en/observances/end-food-waste-day', status: 'bekraeftet',
+  },
+  {
+    id: 'repair-day', type: 'arr', date: '2027-10-16', org: 'Open Repair Alliance', place: 'Lokale aktioner',
+    title: 'International Repair Day', audience: 'Borgere og repair caféer',
+    todo: 'Temadag om reparation, fx med repair caféer på genbrugspladser og biblioteker.',
+    url: 'https://repairday.org', status: 'bekraeftet',
+  },
+  {
+    id: 'cirk-genbrugsplads', type: 'arr', date: '2027-10-01', approx: true, org: 'Cirkulær',
+    title: 'Genbrugspladskonference', audience: 'Genbrugspladser', last: 'I 2026 var det 20. oktober i Silkeborg.',
+    url: 'https://cirkulaer.dk/arrangementer/genbrugspladskonference', status: 'forventet', basis: 'datoen i 2026',
+  },
+  {
+    id: 'ewwr-2027', type: 'arr', date: '2027-11-01', approx: true, org: 'EWWR', place: 'Lokale aktioner',
+    title: 'Europæisk uge for affaldsreduktion 2027', audience: 'Kommuner, affaldsselskaber og borgere', last: 'I 2026 var det 21.-29. november.',
+    todo: 'Tilmeldingen af aktioner åbner i september 2027.',
+    url: 'https://ewwr.eu', status: 'forventet', basis: 'datoen i 2026',
+  },
+];
+/* ITEMS-END */
+
+const PROPOSALS = [
+  {
+    label: 'Ændret dato', found: 'Høringsportalen, 28. oktober 2026', conf: 'middel, står i et udkast',
+    title: 'Emballage: opgørelse til Energistyrelsen', diff: ['1. maj 2027', '1. april 2027'],
+    facts: [
+      ['Kilde', '<a href="https://hoeringsportalen.dk/Hearing/Details/71716" target="_blank" rel="noopener">Udkast til ændring af emballagebekendtgørelsen (høring 71716)</a>'],
+      ['Fundet', 'Udkastets § 109 rykker fristen fra 1. maj til 1. april hvert år.'],
+      ['Forslag', 'Vis 1. april som forventet dato, indtil bekendtgørelsen er udstedt.'],
+    ],
+  },
+  {
+    label: 'Ny dato', found: 'Folketingets åbne data, i dag kl. 06.00', conf: 'høj',
+    title: 'L 93 om producentgebyrer for emballage: 3. behandling 17. december 2026',
+    facts: [
+      ['Kilde', '<a href="https://oda.ft.dk/api/Sagstrin?$filter=sagid%20eq%20106468" target="_blank" rel="noopener">Tidsplan for L 93 i Folketingets åbne data</a>'],
+      ['Forslag', 'Det er ikke en frist for kommunerne. Tilføj det som en note til tildelingsperioden 1. januar 2027 i stedet for et nyt punkt.'],
+    ],
+  },
+  {
+    label: 'Til manuel kontrol', found: 'Høringsportalen, 20. november 2026', conf: 'lav, ingen dato fundet',
+    title: 'Nye regler for affaldsforbrændingsanlæg m.fl. (høring 71634)',
+    facts: [
+      ['Kilde', '<a href="https://hoeringsportalen.dk/Hearing/Details/71634" target="_blank" rel="noopener">Høring om bl.a. godkendelses-, standardvilkårs- og affaldsforbrændingsbekendtgørelsen</a>'],
+      ['Fundet', 'Høringsfristen udløb 20. november 2026. Feedet nævner ingen dato for ikrafttræden.'],
+      ['Forslag', 'Læs høringsbrevet, og opret en frist for anlæggene, når datoen kendes.'],
+    ],
+  },
+  {
+    label: 'Dato mangler', found: 'cirkulaer.dk, i dag kl. 06.00', conf: 'middel, bygger på sidste år',
+    title: 'Cirkulært Topmøde 2027',
+    facts: [
+      ['Kilde', '<a href="https://cirkulaer.dk/cirkulaert-topmoede-2026" target="_blank" rel="noopener">Cirkulært Topmøde 2026</a>'],
+      ['Fundet', 'Topmødet for 2027 er ikke annonceret. I 2026 var det 24.-25. marts.'],
+      ['Forslag', 'Vis det som forventet i marts, og ret datoen, når den kommer.'],
+    ],
+  },
+];
+const SOURCES = [
+  { name: 'Retsinformation', how: 'API og Atom-feed', status: 'OK', ok: true },
+  { name: 'Høringsportalen', how: 'Atom-feed pr. myndighed', status: 'OK', ok: true },
+  { name: 'Folketinget', how: 'Åbne data (ODA)', status: 'OK', ok: true },
+  { name: 'Energistyrelsen', how: 'Nyhedsside (intet RSS)', status: 'OK', ok: true },
+  { name: 'Miljøstyrelsen', how: 'Nyhedsside', status: 'OK', ok: true },
+  { name: 'EUR-Lex', how: 'EU\'s åbne data (CELLAR og SPARQL)', status: 'OK', ok: true },
+  { name: 'Erhvervsstyrelsen', how: 'Mailservice ved ændringer', status: 'OK', ok: true },
+  { name: 'Dansk Producentansvar', how: 'RSS-feed', status: 'Feedet er tomt, tjek siden', ok: false },
+  { name: 'DAKOFA', how: 'Sitemap og arrangementssider (intet RSS)', status: 'OK', ok: true },
+  { name: 'Brancheforeningen Cirkulær', how: 'Arrangementsliste og sitemap', status: 'OK', ok: true },
+  { name: 'KL', how: 'Notat med konferencedatoer', status: 'OK', ok: true },
+  { name: 'Verdis', how: 'Konferenceside', status: 'OK', ok: true },
+  { name: 'Ferskvandscentret', how: 'Kursusoversigt (PDF)', status: 'OK', ok: true },
+  { name: 'ISWA', how: 'iCal-feed', status: 'OK', ok: true },
+  { name: 'Affaldsfeed', how: 'Datoer i nyhederne', status: 'OK', ok: true },
+];
+
+/* =====================================================================
+   HJÆLPERE
+   ===================================================================== */
+const $ = (s, el = document) => el.querySelector(s);
+const $$ = (s, el = document) => [...el.querySelectorAll(s)];
+const MONTHS = ['januar', 'februar', 'marts', 'april', 'maj', 'juni', 'juli', 'august', 'september', 'oktober', 'november', 'december'];
+const MON = ['jan.', 'feb.', 'mar.', 'apr.', 'maj', 'jun.', 'jul.', 'aug.', 'sep.', 'okt.', 'nov.', 'dec.'];
+const MON3 = ['Jan', 'Feb', 'Mar', 'Apr', 'Maj', 'Jun', 'Jul', 'Aug', 'Sep', 'Okt', 'Nov', 'Dec'];
+const WD = ['søndag', 'mandag', 'tirsdag', 'onsdag', 'torsdag', 'fredag', 'lørdag'];
+const DAY = 864e5;
+const parse = (s) => { const [y, m, d] = s.split('-').map(Number); return new Date(y, m - 1, d); };
+const NOW = new Date();
+const TODAY = new Date(NOW.getFullYear(), NOW.getMonth(), NOW.getDate());
+const daysTo = (d) => Math.round((d - TODAY) / DAY);
+const addMonths = (d, n) => new Date(d.getFullYear(), d.getMonth() + n, d.getDate());
+const cap = (s) => s.charAt(0).toUpperCase() + s.slice(1);
+const fmtShort = (d) => `${d.getDate()}. ${MON[d.getMonth()]}`;
+const fmtLong = (d) => `${d.getDate()}. ${MONTHS[d.getMonth()]} ${d.getFullYear()}`;
+const esc = (s) => String(s ?? '').replace(/[&<>"]/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const plural = (n, one, many) => `${n} ${n === 1 ? one : many}`;
+
+for (const it of ITEMS) {
+  it._d = parse(it.date);
+  it._e = it.end ? parse(it.end) : it._d;
+  it._f = it.from ? parse(it.from) : null;
+  it._s = it.signupBy ? parse(it.signupBy) : null;
+}
+const byDate = (a, b) => (a._d - b._d) || (a.type === b.type ? 0 : a.type === 'frist' ? -1 : 1);
+const byId = (id) => ITEMS.find((i) => i.id === id);
+
+const ICON = {
+  chev: '<svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m4 6 4 4 4-4"/></svg>',
+  ext: '<svg width="12" height="12" viewBox="0 0 16 16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3H3v10h10V9M10 2h4v4M14 2 7 9"/></svg>',
+  cal: '<svg width="14" height="14" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="3.5" y="5" width="17" height="15" rx="2"/><path d="M3.5 10h17M8 3v4M16 3v4"/></svg>',
+  prev: '<svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m10 3-5 5 5 5"/></svg>',
+  next: '<svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m6 3 5 5-5 5"/></svg>',
+};
+
+/* =====================================================================
+   TILSTAND
+   ===================================================================== */
+const firstYear = Math.min(TODAY.getFullYear(), ...ITEMS.map((i) => i._d.getFullYear()));
+const lastYear = Math.max(...ITEMS.map((i) => i._e.getFullYear()));
+const state = {
+  view: 'liste',                       /* 'liste' | 'hjul' */
+  type: 'alle',                        /* listen: 'alle' | 'frist' | 'arr' */
+  wshow: 'alle',                       /* årshjulet: 'alle' | 'frist' | 'arr' */
+  year: Math.min(Math.max(TODAY.getFullYear() + (TODAY.getMonth() >= 10 ? 1 : 0), firstYear), lastYear),
+  month: null,
+};
+const INTRO = {
+  alle: 'Frister og arrangementer på affaldsområdet for kommuner og affaldsselskaber.',
+  frist: 'Frister, som kommuner og affaldsselskaber skal overholde.',
+  arr: 'Konferencer, kurser, netværksmøder og temadage på affaldsområdet.',
+  hjul: 'Vælg en måned for at se dens frister og arrangementer.',
+};
+/* To punkter på samme dag: datoen vises kun ved det første */
+const sameDay = (a, b) => !a.approx && !b.approx && a._d - b._d === 0 && a._e - b._e === 0;
+
+/* =====================================================================
+   PUNKTER
+   ===================================================================== */
+/* Datokolonnen: kun datoen. Perioder vises som to datoer i samme skrift under hinanden,
+   højrestillet med et lille "til" foran slutdatoen, så start- og slutdato altid flugter. */
+function dateCell(it, show = true) {
+  const d = it._d;
+  if (!show) return `<span class="ev-date"><span class="sr-only">${fmtLong(d)}</span></span>`;
+  if (it.approx) return `<span class="ev-date"><b>${cap(MON[d.getMonth()])}</b><small>dato<br>kommer</small></span>`;
+  const range = it.end && it._e - it._d >= DAY;
+  return `<span class="ev-date"><b>${fmtShort(d)}</b>${range ? `<span class="to"><small>til</small><b>${fmtShort(it._e)}</b></span>` : ''}</span>`;
+}
+function metaText(it) {
+  const parts = [];
+  if (it.type === 'frist') {
+    parts.push(esc(it.for));
+    if (it._f) parts.push(`${fmtShort(it._f)} til ${fmtShort(it._d)}`);
+  } else {
+    parts.push(esc([it.org, it.place].filter(Boolean).join(' · ')));
+    if (it._s && it._s >= TODAY) parts.push(`tilmelding senest ${fmtShort(it._s)}`);
+  }
+  let html = parts.filter(Boolean).join(' · ');
+  if (it.status === 'forventet') html += `${html ? ' · ' : ''}<em>forventet dato</em>`;
+  return html;
+}
+function bodyHTML(it) {
+  const rows = [];
+  if (it.type === 'arr') {
+    if (it.approx) rows.push(['Dato', `Ikke meldt ud endnu. ${esc(it.last || '')}`]);
+    else if (it.end) rows.push(['Dato', `${fmtLong(it._d)} til ${fmtLong(it._e)}`]);
+    if (it.audience) rows.push(['For hvem', esc(it.audience)]);
+    if (it.price) rows.push(['Pris', esc(it.price)]);
+    if (it.signup) rows.push(['Tilmelding', esc(it.signup)]);
+  }
+  if (it.note) rows.push(['Godt at vide', esc(it.note)]);
+  if (it.law) rows.push(['Regler', esc(it.law)]);
+  if (it.tpl) rows.push(['Skabelon', it.tpl.url ? `<a href="${esc(it.tpl.url)}" target="_blank" rel="noopener">${esc(it.tpl.name)}</a>` : esc(it.tpl.name)]);
+
+  const link = it.url || (it.src && it.src.url);
+  const linkLbl = it.type === 'arr' ? 'Se arrangementet' : `Kilde: ${esc(it.src.name)}`;
+  /* Status vises kun, når datoen ikke er bekræftet; bekræftet er det normale */
+  return `<div class="ev-body">
+    ${it.todo ? `<p class="ev-text">${esc(it.todo)}</p>` : ''}
+    ${rows.length ? `<dl class="facts">${rows.map(([k, v]) => `<dt>${k}</dt><dd>${v}</dd>`).join('')}</dl>` : ''}
+    <div class="links">
+      ${link ? `<a class="tlink" href="${esc(link)}" target="_blank" rel="noopener">${linkLbl} ${ICON.ext}</a>` : ''}
+      ${it.approx || it._mirror ? '' : `<button type="button" class="tlink" data-act="ics" data-id="${it.id}">${ICON.cal} Tilføj til kalender</button>`}
+    </div>
+    ${it.status === 'forventet' ? `<p class="status">Forventet dato ud fra ${esc(it.basis || 'tidligere år')}.</p>` : ''}</div>`;
+}
+function evHTML(it, suffix = '', showDate = true, showMark = false) {
+  return `<li class="ev${it._e < TODAY ? ' past' : ''}${showMark ? ' wmk' : ''}" id="ev-${it.id}${suffix}">
+    <details data-id="${it.id}">
+      <summary><span class="ev-row${showMark ? ' wmk' : ''}">
+        ${dateCell(it, showDate)}
+        ${showMark ? `<span class="ev-rail" aria-hidden="true"><span class="mark ${it.type === 'frist' ? 'f' : 'a'}"></span></span>` : ''}
+        <span class="ev-main"><span class="ev-title">${esc(it.title)}</span><span class="ev-meta">${metaText(it)}</span></span>
+        <span class="chev">${ICON.chev}</span>
+      </span></summary>
+      ${bodyHTML(it)}
+    </details></li>`;
+}
+const countText = (nf, na) => [nf ? plural(nf, 'frist', 'frister') : '', na ? plural(na, 'arrangement', 'arrangementer') : ''].filter(Boolean).join(' og ');
+
+/* =====================================================================
+   LISTER (Frister og Arrangementer)
+   ===================================================================== */
+const listItems = () => ITEMS.filter((it) => (state.type === 'alle' || it.type === state.type) && it._e >= TODAY).sort(byDate);
+function renderList() {
+  const items = listItems();
+  const groups = new Map();
+  for (const it of items) {
+    const ref = it._d < TODAY ? TODAY : it._d;
+    const key = `${ref.getFullYear()}-${ref.getMonth()}`;
+    if (!groups.has(key)) groups.set(key, { y: ref.getFullYear(), m: ref.getMonth(), items: [] });
+    groups.get(key).items.push(it);
+  }
+  $('#viewList').innerHTML = [...groups.values()].map((g) => `<section class="mgroup" aria-labelledby="mh-${g.y}-${g.m}">
+      <h2 class="month-h" id="mh-${g.y}-${g.m}">${cap(MONTHS[g.m])} ${g.y}</h2>
+      <ol class="tl">${g.items.map((it, i) => evHTML(it, '', i === 0 || !sameDay(it, g.items[i - 1]), state.type === 'alle')).join('')}</ol></section>`).join('');
+  return items.length;
+}
+
+/* =====================================================================
+   ÅRSHJUL
+   ===================================================================== */
+const WH = { c: 320, rOut: 314, rIn: 118 };
+const r1 = (n) => Math.round(n * 10) / 10;
+function pol(r, a) { const t = (a - 90) * Math.PI / 180; return [r1(WH.c + r * Math.cos(t)), r1(WH.c + r * Math.sin(t))]; }
+function ringPath(ri, ro, a1, a2) {
+  const [x1, y1] = pol(ro, a1), [x2, y2] = pol(ro, a2), [x3, y3] = pol(ri, a2), [x4, y4] = pol(ri, a1);
+  const L = a2 - a1 > 180 ? 1 : 0;
+  return `M${x1} ${y1}A${ro} ${ro} 0 ${L} 1 ${x2} ${y2}L${x3} ${y3}A${ri} ${ri} 0 ${L} 0 ${x4} ${y4}Z`;
+}
+/* Punkter i et år. Faste årlige frister (every: 'år') vises også i de følgende år som forventede. */
+function wheelItems(Y, all = false) {
+  const out = [];
+  for (const it of ITEMS) {
+    if (!all && state.wshow !== 'alle' && state.wshow !== it.type) continue;
+    if (it.approx && it._d.getFullYear() === Y) { const mid = new Date(Y, it._d.getMonth(), 15); out.push({ it, d: mid, e: mid, mirror: false }); continue; }
+    if (it._d.getFullYear() === Y) { out.push({ it, d: it._d, e: it._e, mirror: false }); continue; }
+    if (it.every === 'år' && Y > it._d.getFullYear()) {
+      const dy = Y - it._d.getFullYear();
+      const sh = (x) => new Date(x.getFullYear() + dy, x.getMonth(), x.getDate());
+      /* Årstal i titel og tekst flyttes med, fx "data for 2026" bliver "data for 2027" */
+      const shiftYears = (s) => (s ? s.replace(/\b(20\d\d)\b/g, (y) => String(Number(y) + dy)) : s);
+      const view = Object.assign(Object.create(it), {
+        _d: sh(it._d), _e: sh(it._e), _f: null, _mirror: true, note: undefined,
+        title: shiftYears(it.title), todo: shiftYears(it.todo), status: 'forventet', basis: `datoen i ${it._d.getFullYear()}`,
+      });
+      out.push({ it: view, d: view._d, e: view._e, mirror: true });
+    }
+  }
+  return out.sort((a, b) => a.d - b.d);
+}
+function defaultMonth(Y) {
+  if (Y === TODAY.getFullYear()) return TODAY.getMonth();
+  const list = wheelItems(Y, true).filter((w) => w.d >= TODAY);
+  return list.length ? list[0].d.getMonth() : 0;
+}
+/* Antal i et månedsfelt: ◆ 4  ○ 3 */
+function sliceCounts(x, y, nf, na) {
+  /* Kun én type valgt: bare tallet, symbolet er overflødigt */
+  if (state.wshow !== 'alle') {
+    const n = nf + na;
+    return n ? `<text class="scount" x="${r1(x)}" y="${r1(y)}" text-anchor="middle" dominant-baseline="central">${n}</text>` : '';
+  }
+  const parts = [];
+  if (nf) parts.push(['f', nf]);
+  if (na) parts.push(['a', na]);
+  const w = (n) => 14 + 7 + String(n).length * 13;
+  const gap = 16;
+  let x0 = x - (parts.reduce((s, [, n]) => s + w(n), 0) + gap * Math.max(0, parts.length - 1)) / 2;
+  return parts.map(([t, n]) => {
+    const ix = r1(x0 + 7);
+    const icon = t === 'f'
+      ? `<rect class="ic-f" x="${r1(ix - 6)}" y="${r1(y - 6)}" width="12" height="12" rx="1.5" transform="rotate(45 ${ix} ${r1(y)})"></rect>`
+      : `<circle class="ic-a" cx="${ix}" cy="${r1(y)}" r="6.5"></circle>`;
+    const txt = `<text class="scount" x="${r1(x0 + 21)}" y="${r1(y)}" dominant-baseline="central">${n}</text>`;
+    x0 += w(n) + gap;
+    return icon + txt;
+  }).join('');
+}
+function renderWheel() {
+  const Y = state.year;
+  if (state.month === null) state.month = defaultMonth(Y);
+  const list = wheelItems(Y);
+  const nfY = list.filter((w) => w.it.type === 'frist').length;
+  $('#wheel').setAttribute('aria-label', `Årshjul ${Y}`);
+  $('#yLbl').textContent = Y;
+  $('#yPrev').disabled = Y <= firstYear;
+  $('#yNext').disabled = Y >= lastYear;
+  $('#yCount').innerHTML = [nfY ? `<span>${plural(nfY, 'frist', 'frister')}</span>` : '',
+    list.length - nfY ? `<span>${plural(list.length - nfY, 'arrangement', 'arrangementer')}</span>` : ''].join('') || '<span>Ingen punkter</span>';
+  let h = '';
+  for (let m = 0; m < 12; m++) {
+    const a1 = m * 30, a2 = a1 + 30, mid = a1 + 15;
+    const inM = list.filter((w) => w.d.getMonth() === m);
+    const nf = inM.filter((w) => w.it.type === 'frist').length;
+    const sel = m === state.month;
+    /* Månedsnavn og antal stables lodret midt i feltet, så de ikke støder sammen ved kl. 3 og 9 */
+    const [cx, cy] = pol((WH.rIn + WH.rOut) / 2, mid);
+    const has = inM.length > 0;
+    h += `<g class="slice${sel ? ' sel' : ''}" data-m="${m}" tabindex="0" role="button" aria-pressed="${sel}"
+      aria-label="${cap(MONTHS[m])} ${Y}: ${countText(nf, inM.length - nf) || 'ingen punkter'}">
+      <path class="seg" d="${ringPath(WH.rIn, WH.rOut, a1, a2)}"></path>
+      <text class="slabel" x="${cx}" y="${r1(has ? cy - 16 : cy)}" text-anchor="middle" dominant-baseline="central">${MON3[m]}</text>
+      ${sliceCounts(cx, cy + 18, nf, inM.length - nf)}</g>`;
+  }
+  /* Indeværende måned får en lysegrøn kant */
+  if (Y === TODAY.getFullYear()) {
+    const m = TODAY.getMonth();
+    h += `<path class="cur-outline" d="${ringPath(WH.rIn + 3, WH.rOut - 3, m * 30 + 1, m * 30 + 29)}"></path>`;
+  }
+  $('#wheel').innerHTML = h;
+  renderMonthPanel();
+}
+function renderMonthPanel() {
+  const Y = state.year, m = state.month;
+  const inM = wheelItems(Y).filter((w) => w.d.getMonth() === m);
+  /* Antallet står allerede i månedsfeltet, så her vises kun månedens navn og listen.
+     Symbolerne for frist/arrangement vises kun, når begge typer er med. */
+  const mixed = state.wshow === 'alle';
+  $('#mpanel').innerHTML = `<h3>${cap(MONTHS[m])} ${Y}</h3>
+    <div class="mscroll">${inM.length ? `<ol class="mlist">${inM.map((w, i) => evHTML(w.it, '-m', i === 0 || !sameDay(w.it, inM[i - 1].it), mixed)).join('')}</ol>` : '<p class="none">Der er ikke noget i kalenderen i denne måned.</p>'}</div>
+    <div class="mfade" aria-hidden="true"></div>`;
+  /* Udtoningen i bunden vises kun, når der er flere punkter længere nede i listen */
+  const panel = $('#mpanel');
+  const sc = $('#mpanel .mscroll');
+  const update = () => panel.classList.toggle('more', sc.scrollTop + sc.clientHeight < sc.scrollHeight - 4);
+  sc.addEventListener('scroll', update, { passive: true });
+  sc.addEventListener('toggle', update, true);
+  new ResizeObserver(update).observe(sc);
+  update();
+}
+
+/* =====================================================================
+   REDAKTION
+   ===================================================================== */
+function renderRedaktion() {
+  $('#props').innerHTML = PROPOSALS.map((p) => `<article class="prop">
+      <div class="prop-h"><span class="ptype">${esc(p.label)}</span><span>Fundet i ${esc(p.found)}</span><span>Sikkerhed: ${esc(p.conf)}</span></div>
+      <h3>${esc(p.title)}</h3>
+      ${p.diff ? `<p class="diff" style="margin:0">Dato: <del>${esc(p.diff[0])}</del> til <ins>${esc(p.diff[1])}</ins></p>` : ''}
+      <dl class="facts">${p.facts.map(([k, v]) => `<dt>${esc(k)}</dt><dd>${v}</dd>`).join('')}</dl>
+      <div class="prop-actions">
+        <button type="button" class="btn btn-solid" data-prop="ok">Godkend</button>
+        <button type="button" class="btn" data-prop="edit">Ret og godkend</button>
+        <button type="button" class="btn" data-prop="no">Afvis</button>
+      </div></article>`).join('');
+  $('#prop-title').textContent = `Forslag til godkendelse (${PROPOSALS.length})`;
+  $('#srcTable').innerHTML = SOURCES.map((s) => `<tr><td>${esc(s.name)}</td><td>${esc(s.how)}</td><td><span class="${s.ok ? 'ok' : 'warn'}">${esc(s.status)}</span></td></tr>`).join('');
+  const bad = SOURCES.filter((s) => !s.ok).length;
+  $('#runInfo').textContent = `Seneste kørsel i dag kl. 06.00: ${plural(SOURCES.length, 'kilde', 'kilder')} tjekket og ${plural(PROPOSALS.length, 'forslag', 'forslag')} til godkendelse${bad ? `. ${plural(bad, 'kilde skal', 'kilder skal')} ses efter` : ''}.`;
+}
+
+/* =====================================================================
+   RENDER
+   ===================================================================== */
+function render() {
+  const wheel = state.view === 'hjul';
+  $('#viewList').hidden = wheel;
+  $('#viewWheel').hidden = !wheel;
+  $('#ctlType').hidden = wheel;
+  $('#ctlShow').hidden = !wheel;
+  $$('#ctlType [data-type]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.type === state.type)));
+  $$('#ctlShow [data-wshow]').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.wshow === state.wshow)));
+  $$('.viewbar .pill').forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.view === state.view)));
+  $('#introText').textContent = wheel ? INTRO.hjul : INTRO[state.type];
+  let n;
+  if (wheel) { $('#viewList').innerHTML = ''; renderWheel(); n = wheelItems(state.year).length; }
+  else { $('#mpanel').innerHTML = ''; n = renderList(); }
+  $('#live').textContent = `Viser ${plural(n, 'punkt', 'punkter')}`;
+}
+
+/* =====================================================================
+   KALENDERFIL (.ics) OG ABONNEMENT
+   ===================================================================== */
+const icsDate = (d) => `${d.getFullYear()}${String(d.getMonth() + 1).padStart(2, '0')}${String(d.getDate()).padStart(2, '0')}`;
+const icsEsc = (s) => String(s || '').replace(/\\/g, '\\\\').replace(/;/g, '\\;').replace(/,/g, '\\,').replace(/\r?\n/g, '\\n');
+function icsFold(line) {
+  const out = []; let rest = line;
+  while (rest.length > 70) { out.push(rest.slice(0, 70)); rest = ' ' + rest.slice(70); }
+  out.push(rest);
+  return out.join('\r\n');
+}
+function buildICS(items) {
+  const stamp = new Date().toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
+  const L = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Affaldsviden//Kalender//DA', 'CALSCALE:GREGORIAN', 'METHOD:PUBLISH', 'X-WR-CALNAME:Affaldsviden: frister og arrangementer'];
+  for (const it of items.filter((x) => !x.approx)) {
+    const endEx = new Date(it._e); endEx.setDate(endEx.getDate() + 1);
+    const desc = [it.todo, it.note, it.src ? `Kilde: ${it.src.name} ${it.src.url}` : '', 'Fra Affaldsvidens kalender: https://affaldsviden.info/kalender/'].filter(Boolean).join('\n\n');
+    L.push('BEGIN:VEVENT', `UID:${it.id}@affaldsviden.info`, `DTSTAMP:${stamp}`, `DTSTART;VALUE=DATE:${icsDate(it._d)}`, `DTEND;VALUE=DATE:${icsDate(endEx)}`,
+      icsFold(`SUMMARY:${icsEsc((it.type === 'frist' ? 'Frist: ' : '') + it.title)}`), icsFold(`DESCRIPTION:${icsEsc(desc)}`), 'TRANSP:TRANSPARENT');
+    if (it.place) L.push(icsFold(`LOCATION:${icsEsc(it.place)}`));
+    const link = it.url || (it.src && it.src.url);
+    if (link) L.push(icsFold(`URL:${link}`));
+    if (it.type === 'frist') L.push('BEGIN:VALARM', 'ACTION:DISPLAY', 'DESCRIPTION:Frist om en uge', 'TRIGGER:-P7D', 'END:VALARM');
+    L.push('END:VEVENT');
+  }
+  L.push('END:VCALENDAR');
+  return L.join('\r\n');
+}
+function downloadICS(items, name) {
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(new Blob([buildICS(items)], { type: 'text/calendar;charset=utf-8' }));
+  a.download = name;
+  document.body.append(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+}
+function updateSubUrl() {
+  const what = $('input[name="subwhat"]:checked').value;
+  const q = { frist: '?vis=frister', arr: '?vis=arrangementer', alle: '' }[what];
+  $('#subUrl').value = `webcal://affaldsviden.info/kalender.ics${q}`;
+}
+function openSub() { updateSubUrl(); $('#subDlg').showModal(); }
+
+/* =====================================================================
+   SMÅTING
+   ===================================================================== */
+let toastTimer = 0;
+function toast(msg) {
+  const t = $('#toast');
+  t.textContent = '';
+  requestAnimationFrame(() => { t.textContent = msg; t.classList.add('show'); });
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => t.classList.remove('show'), 2800);
+}
+async function copyText(text, ok) {
+  try { await navigator.clipboard.writeText(text); toast(ok); } catch { toast('Linket kunne ikke kopieres. Markér det, og kopiér det selv.'); }
+}
+function openItem(id) {
+  const it = byId(id);
+  if (!it) return;
+  if (state.view !== 'liste' || (state.type !== 'alle' && state.type !== it.type)) { state.view = 'liste'; state.type = 'alle'; render(); }
+  const det = $(`#ev-${CSS.escape(id)} > details`);
+  if (det) { det.open = true; det.scrollIntoView({ block: 'center' }); det.querySelector('summary').focus({ preventScroll: true }); }
+}
+
+/* =====================================================================
+   SKÆRME (mockup-navigation)
+   ===================================================================== */
+function route() {
+  const [scr0, id] = (location.hash || '#kalender').slice(1).split(':');
+  const view = { liste: 'liste', aarshjul: 'hjul' }[scr0];
+  if (view) state.view = view;
+  const scr = ['kalender', 'redaktion'].includes(scr0) ? scr0 : 'kalender';
+  $$('[data-screen]').forEach((el) => { el.hidden = el.dataset.screen !== scr; });
+  $$('[data-mock]').forEach((a) => a.setAttribute('aria-current', String(a.dataset.mock === scr)));
+  if (scr === 'kalender') $('#navKalender').setAttribute('aria-current', 'page'); else $('#navKalender').removeAttribute('aria-current');
+  document.title = `${{ kalender: 'Kalender', redaktion: 'Redaktion' }[scr]} – Affaldsviden (mockup)`;
+  if (scr === 'redaktion') renderRedaktion();
+  if (scr === 'kalender') { render(); if (id) requestAnimationFrame(() => openItem(id)); else window.scrollTo(0, 0); } else window.scrollTo(0, 0);
+}
+
+/* =====================================================================
+   HÆNDELSER
+   ===================================================================== */
+document.addEventListener('click', (e) => {
+  const t = e.target;
+  const view = t.closest('.viewbar .pill');
+  if (view) { state.view = view.dataset.view; history.replaceState(null, '', state.view === 'hjul' ? '#aarshjul' : '#liste'); render(); return; }
+  const ty = t.closest('#ctlType [data-type]');
+  if (ty) { state.type = ty.dataset.type; render(); return; }
+  const ws = t.closest('[data-wshow]');
+  if (ws) { state.wshow = ws.dataset.wshow; render(); return; }
+  const close = t.closest('[data-close]');
+  if (close) { close.closest('dialog').close(); return; }
+  const slice = t.closest('#wheel .slice');
+  if (slice) { state.month = Number(slice.dataset.m); renderWheel(); return; }
+  const prop = t.closest('[data-prop]');
+  if (prop) {
+    const card = prop.closest('.prop');
+    const txt = { ok: 'Godkendt. Punktet er lagt i kalenderen.', edit: 'Rettet og godkendt.', no: 'Afvist. Forslaget er gemt i loggen.' }[prop.dataset.prop];
+    card.classList.add('done');
+    card.querySelector('.prop-actions').innerHTML = `<span class="result">${txt}</span>`;
+    toast(`${txt} (Kun i mockuppet.)`); return;
+  }
+  const act = t.closest('[data-act]');
+  if (!act) return;
+  const a = act.dataset.act;
+  if (a === 'sub') { e.preventDefault(); if (!location.hash.startsWith('#kalender')) location.hash = '#kalender'; openSub(); }
+  if (a === 'aboutcal') $('#calDlg').showModal();
+  if (a === 'ics') { const it = byId(act.dataset.id); downloadICS([it], `${it.id}.ics`); toast('Kalenderfilen er hentet. Åbn den for at lægge punktet i din kalender.'); }
+});
+document.addEventListener('keydown', (e) => {
+  if ((e.key === 'Enter' || e.key === ' ') && e.target.matches('#wheel .slice')) {
+    e.preventDefault();
+    state.month = Number(e.target.dataset.m);
+    renderWheel();
+    $(`#wheel .slice[data-m="${state.month}"]`).focus();
+  }
+});
+$('#yPrev').addEventListener('click', () => { state.year--; state.month = defaultMonth(state.year); render(); });
+$('#yNext').addEventListener('click', () => { state.year++; state.month = defaultMonth(state.year); render(); });
+$('#subDlg').addEventListener('change', (e) => { if (e.target.name === 'subwhat') updateSubUrl(); });
+$('#copySub').addEventListener('click', () => copyText($('#subUrl').value, 'Abonnementslinket er kopieret.'));
+
+/* Lys afvisning af dialoger i browsere uden closedby (modern-web-guidance: dialog) */
+if (!('closedBy' in HTMLDialogElement.prototype)) {
+  const outside = (e, d) => { const r = d.getBoundingClientRect(); return e.clientX < r.left || e.clientX > r.right || e.clientY < r.top || e.clientY > r.bottom; };
+  for (const d of $$('dialog[closedby="any"]')) {
+    let down = false;
+    d.addEventListener('pointerdown', (e) => { down = outside(e, d); });
+    d.addEventListener('pointerup', (e) => { if (down && outside(e, d)) d.close(); });
+  }
+}
+
+$('#srcList').innerHTML = SOURCES.map((s) => `<li>${esc(s.name)}</li>`).join('');
+window.addEventListener('hashchange', route);
+route();
+</script>
+</body>
+</html>
