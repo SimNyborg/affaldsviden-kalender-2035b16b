@@ -448,6 +448,8 @@
 const RI = (y, n) => ({ name: 'Retsinformation', url: `https://www.retsinformation.dk/eli/lta/${y}/${n}` });
 const HOERING_EMB = { name: 'Høringsportalen', url: 'https://hoeringsportalen.dk/Hearing/Details/71716' };
 const UDKAST = 'udkastet til ændring af emballagebekendtgørelsen';
+const HOERING_FORBR = { name: 'Høringsportalen', url: 'https://hoeringsportalen.dk/Hearing/Details/71634' };
+const UDKAST_FORBR = 'høringsudkastet til affaldsforbrændingsbekendtgørelsen';
 
 /* ITEMS-START */
 const ITEMS = [
@@ -475,8 +477,16 @@ const ITEMS = [
     id: 'prisloft-aftaler', type: 'frist', date: '2027-01-01', for: 'Forbrændingsanlæg',
     title: 'Affaldsvarme: prisloftet gælder også ældre aftaler',
     todo: 'Prisloftet for affaldsvarme gælder fra 1. januar 2027 også leveringsaftaler, der er indgået før 1. oktober 2024.',
-    note: 'Energistyrelsen melder loftet for det kommende år ud senest 1. november. Et udkast om at ophæve overgangsordningen for anlæg med nye investeringer var i høring til 17. november 2026.',
-    law: 'BEK nr. 1479 af 2025 §§ 10 og 15', src: RI(2025, 1479), status: 'bekraeftet',
+    note: 'Samtidig falder tillægget til prisloftet fra 6 til 3 kr. pr. GJ. Forsyningstilsynet melder loftet for det kommende år ud senest 1. november. Et udkast om at ophæve overgangsordningen for anlæg med nye investeringer var i høring til 17. november 2026.',
+    law: 'BEK nr. 1479 af 2025 §§ 10, 12 og 15', src: RI(2025, 1479), status: 'bekraeftet',
+  },
+  {
+    id: 'miljoestraf', type: 'frist', date: '2027-01-01', for: 'Kommuner og affaldsselskaber',
+    title: 'Miljøregler: højere straffe for overtrædelser',
+    todo: 'Bøderne for at overtræde miljøbeskyttelsesloven og jordforureningsloven bliver højere, især ved økonomisk vinding og alvorlige miljøovertrædelser. Lovforslaget bygger bl.a. på handlingsplanen for jordflytning og bygge- og anlægsaffald.',
+    note: 'Lovforslaget skal efter planen 3. behandles i Folketinget 17. december 2026.',
+    law: 'Lovforslag L 69 (2026-27)', src: { name: 'Folketinget', url: 'https://www.ft.dk/samling/20261/lovforslag/l69/index.htm' },
+    status: 'forventet', basis: 'lovforslag L 69',
   },
   {
     id: 'ads-2026', type: 'frist', date: '2027-02-01', every: 'år', for: 'Affaldsselskaber og anlæg',
@@ -491,6 +501,13 @@ const ITEMS = [
     todo: 'Kommunen fastsætter producentgebyrerne for 2027 pr. fraktion og ordning, lægger gebyrbladet på hjemmesiden som regneark og opkræver 1. kvartal. Efterreguleringen for 1. oktober 2025 til 31. december 2026 opkræves i 16 kvartalsrater.',
     note: 'Efter den gældende bekendtgørelse skulle opkrævningen ske 1. januar 2027. Datoen 1. februar står i udkastet til ændring.',
     law: 'Udkast til ændring af emballagebekendtgørelsen §§ 104-107', src: HOERING_EMB, status: 'forventet', basis: UDKAST,
+  },
+  {
+    id: 'forbr-overvaagning', type: 'frist', date: '2027-02-01', for: 'Forbrændingsanlæg',
+    title: 'Affaldsforbrænding: nye krav til overvågning af emissioner',
+    todo: 'Den nye affaldsforbrændingsbekendtgørelse gennemfører EU\'s ændrede direktiv om industrielle emissioner. Den stiller nye krav til overvågning af emissioner til luften, også for anlæg, der er godkendt før 1. februar 2027.',
+    note: 'Store anlæg (listepunkt 5.2) får vilkår om overvågningen ved næste godkendelse eller revurdering.',
+    law: 'Udkast til affaldsforbrændingsbekendtgørelse §§ 31 og 50', src: HOERING_FORBR, status: 'forventet', basis: UDKAST_FORBR,
   },
   {
     id: 'ads-fejl', type: 'frist', date: '2027-03-01', every: 'år', for: 'Kommuner og affaldsselskaber',
@@ -537,14 +554,15 @@ const ITEMS = [
     id: 'deponi-benchmark', type: 'frist', date: '2027-06-01', every: 'år', for: 'Deponier',
     title: 'Deponi: benchmarkingdata til Forsyningstilsynet',
     todo: 'Deponeringsanlæg indsender data til Forsyningstilsynets benchmarking.',
-    law: 'BEK nr. 493 af 2024 § 3', src: RI(2024, 493), status: 'bekraeftet',
+    note: 'Forsyningstilsynet offentliggør benchmarkingen inden årets udgang.',
+    law: 'BEK nr. 493 af 2024 §§ 3-4', src: RI(2024, 493), status: 'bekraeftet',
   },
   {
     id: 'batteri-dpa', type: 'frist', date: '2027-06-30', every: 'år', for: 'Affaldsselskaber og anlæg',
     title: 'Batterier: indberetning af mængder for 2026',
     todo: 'Affaldsoperatører og behandlingsanlæg indberetter de mængder batterier, de har indsamlet eller behandlet i 2026, til Dansk Producentansvar.',
-    note: 'Siden 18. august 2025 må kommuner kun indsamle batterier med en skriftlig kontrakt med en producent eller producentorganisation.',
-    law: 'Batteriforordningen (EU) 2023/1542 art. 75, stk. 7, og BEK nr. 986 af 2025 § 15', src: RI(2025, 986), status: 'bekraeftet',
+    note: 'Siden 18. august 2025 må kommuner kun indsamle batterier med en skriftlig kontrakt med en producent eller producentorganisation. Efter batteriforordningen skal producenterne indsamle 63 % af de bærbare batterier senest 31. december 2027.',
+    law: 'Batteriforordningen (EU) 2023/1542 art. 59 og art. 75, stk. 7, og BEK nr. 986 af 2025 § 15', src: RI(2025, 986), status: 'bekraeftet',
   },
   {
     id: 'av-aarsdata', type: 'frist', from: '2027-02-01', date: '2027-06-30', for: 'Kommuner og affaldsselskaber',
@@ -565,8 +583,14 @@ const ITEMS = [
     id: 'ied-ems', type: 'frist', date: '2027-07-01', for: 'Forbrændingsanlæg og andre IED-anlæg',
     title: 'IED-anlæg: miljøledelsessystem skal være på plads',
     todo: 'Anlægget skal have indført et miljøledelsessystem, og det skal være auditeret første gang. Derefter auditeres det mindst hvert tredje år.',
-    note: 'Datoen står i EU-direktivet. Den danske gennemførelse er ikke tjekket.',
+    note: 'EU\'s miljøomnibus vil udskyde kravet til 1. juli 2030. Miljøstyrelsen melder ud i god tid før 1. juli 2027.',
     law: 'Direktiv (EU) 2024/1785, IED art. 14a', src: { name: 'EUR-Lex', url: 'https://eur-lex.europa.eu/eli/dir/2024/1785/oj' }, status: 'bekraeftet',
+  },
+  {
+    id: 'forbr-paabud', type: 'frist', date: '2027-07-01', for: 'Tilsynsmyndigheder og mindre forbrændingsanlæg',
+    title: 'Mindre forbrændingsanlæg: påbud om overvågning af emissioner',
+    todo: 'Tilsynsmyndigheden giver påbud om overvågning af emissioner til luften til affaldsforbrændings- og medforbrændingsanlæg på listepunkt K 201, K 215 og K 217, der er godkendt før 1. februar 2027.',
+    law: 'Udkast til affaldsforbrændingsbekendtgørelse § 51', src: HOERING_FORBR, status: 'forventet', basis: UDKAST_FORBR,
   },
   {
     id: 'ft-regnskab', type: 'frist', date: '2027-07-15', every: 'år', for: 'Kommunale anlæg med genanvendeligt erhvervsaffald',
@@ -617,7 +641,7 @@ const ITEMS = [
     id: 'ppwr-maerker', type: 'frist', date: '2028-08-12', for: 'Kommuner og affaldsselskaber',
     title: 'Emballage: EU-mærker på alle beholdere',
     todo: 'Beholdere til emballageaffald skal have EU\'s fælles mærker. Fristen er tidligst 12. august 2028 og ellers 30 måneder efter, at Kommissionen har vedtaget reglerne for mærkerne.',
-    note: 'Kommissionen skulle vedtage reglerne senest 12. august 2026, men har ikke gjort det endnu. Andre kilder nævner 2. kvartal 2027.',
+    note: 'Kommissionen skulle vedtage reglerne senest 12. august 2026, men har ikke gjort det endnu. Bliver de vedtaget i 2. kvartal 2027, som andre kilder nævner, rykker fristen til 4. kvartal 2029.',
     law: 'Emballageforordningen (EU) 2025/40 art. 13',
     src: { name: 'Europa-Kommissionen', url: 'https://green-forum.ec.europa.eu/green-business/packaging-and-packaging-waste-regulation-implementation_en' },
     status: 'forventet', basis: 'emballageforordningen. Den endelige dato afhænger af Kommissionen',
@@ -663,6 +687,18 @@ const ITEMS = [
     url: 'https://dakofa.dk/netvaerk/netvaerk-for-cirkulaer-emballage-og-plast', status: 'bekraeftet',
   },
   {
+    id: 'di-cea', type: 'arr', date: '2026-12-15', org: 'DI Byggeri', place: 'Online',
+    title: 'Webinar: EU\'s nye Circular Economy Act', audience: 'Åbent for alle', price: 'Gratis',
+    todo: 'Webinar om EU\'s nye Circular Economy Act og planen for et indre marked for cirkulære materialer.',
+    url: 'https://danskindustri.dk/brancher/di-byggeri/kurser-og-arrangementer/webinarer2/webinar-ny-circular-economy-act-eus-plan-for-et-indre-marked-for-cirkulare-materialer/', status: 'bekraeftet',
+  },
+  {
+    id: 'cirk-net-afsaetning', type: 'arr', date: '2027-01-07', org: 'Cirkulær', place: 'Online',
+    title: 'Netværksmøde: afsætning af affaldsfraktioner', audience: 'Cirkulærs medlemmer',
+    todo: 'Virtuelt møde i Cirkulærs netværk for afsætning. Afsætning af træfraktionerne er blandt andet på dagsordenen.',
+    url: 'https://cirkulaer.dk/arrangementer/netvaerk-afsaetning-virtuelt', status: 'bekraeftet',
+  },
+  {
     id: 'affaldsdatadag-2027', type: 'arr', date: '2027-01-14', org: 'Cirkulær og JHN Processor', place: 'Spinderihallerne, Vejle',
     title: 'Affaldsdatadag 2027', audience: 'Kommuner og affaldsselskaber',
     price: '2.650 kr. for medlemmer af Affaldsviden eller Cirkulær. Andre kan deltage en halv dag for 3.650 kr.',
@@ -684,6 +720,18 @@ const ITEMS = [
     id: 'dakofa-udbud', type: 'arr', date: '2027-01-26', end: '2027-01-27', org: 'DAKOFA', place: 'Bech-Bruun, Aarhus',
     title: 'Kursus: udbud og kontraktopfølgning', audience: 'Udbydere og tilbudsgivere', price: '4.500 kr. for medlemmer, 10.500 kr. for andre',
     url: 'https://dakofa.dk/arrangement/en-god-udbudsproces-og-en-fair-kontraktopfoelgning-3', status: 'bekraeftet',
+  },
+  {
+    id: 'ads-webinar', type: 'arr', date: '2027-02-01', approx: true, org: 'ADS', place: 'Online',
+    title: 'Webinar: kvalitetssikring af data i ADS', audience: 'Kommuner', last: 'I 2026 holdt ADS webinarer for kommunerne 5. februar og 4. marts.',
+    todo: 'Webinar for kommuner om at kvalitetssikre de indberettede data i Affaldsdatasystemet.',
+    url: 'https://ads.ens.dk/', status: 'forventet', basis: 'datoerne i 2026',
+  },
+  {
+    id: 'kl-affaldsnet-1', type: 'arr', date: '2027-02-01', approx: true, org: 'KL',
+    title: 'KL\'s Affaldsnetværk, 1. møde', audience: 'Kommunernes medarbejdere på affaldsområdet', last: 'I 2026 var det 26. februar, online.',
+    todo: 'Netværket mødes tre gange om året. Man skal tilmelde sig netværket på KL\'s side for at deltage.',
+    url: 'https://www.kl.dk/klima-og-erhverv/teknik-og-miljoe/netvaerk-teknik-og-miljoe/affaldsnetvaerk', status: 'forventet', basis: 'datoerne i 2026',
   },
   {
     id: 'fvc-affaldsjura', type: 'arr', date: '2027-02-01', org: 'Ferskvandscentret', place: 'Silkeborg', signupBy: '2027-01-08',
@@ -729,14 +777,26 @@ const ITEMS = [
     url: 'https://cirkulaer.dk/arrangementer/forsyningsjura-affald-2027', status: 'bekraeftet',
   },
   {
-    id: 'kl-topmoede', type: 'arr', date: '2027-04-29', end: '2027-04-30', org: 'KL',
-    title: 'Klima & Miljø Topmøde', audience: 'Kommunalpolitikere og forvaltninger', note: 'Værtskommunen er ikke meldt ud. Datoen står i et notat fra KL.',
-    url: 'https://www.kk.dk/sites/default/files/agenda/a3b74b2b-c1d9-4a79-9244-f299da308e45/6f2e01b9-f54f-4f8b-99c4-03350ee77a21-bilag-3_0.pdf', status: 'bekraeftet',
+    id: 'kl-topmoede', type: 'arr', date: '2027-04-29', end: '2027-04-30', org: 'KL', place: 'DGI Huset, Vejle',
+    title: 'Klima & Miljø Topmøde', audience: 'Kommunalpolitikere og forvaltninger', signup: 'Åbner 12. januar 2027',
+    url: 'https://www.kl.dk/konferencer/klima-miljoe-topmoede', status: 'bekraeftet',
   },
   {
     id: 'cirk-ledelseskreds', type: 'arr', date: '2027-05-27', end: '2027-05-28', org: 'Cirkulær', place: 'Hotel Hesselet, Nyborg',
     title: 'Ledelseskredsmøde, forår 2027', audience: 'Ledelser hos Cirkulærs medlemmer',
     url: 'https://cirkulaer.dk/arrangementer/ledelskredsmoede-foraar-2027', status: 'bekraeftet',
+  },
+  {
+    id: 'kl-affaldsnet-2', type: 'arr', date: '2027-06-01', approx: true, org: 'KL',
+    title: 'KL\'s Affaldsnetværk, 2. møde', audience: 'Kommunernes medarbejdere på affaldsområdet', last: 'I 2026 var det 10. juni, som fysisk møde.',
+    todo: 'Netværket mødes tre gange om året. Man skal tilmelde sig netværket på KL\'s side for at deltage.',
+    url: 'https://www.kl.dk/klima-og-erhverv/teknik-og-miljoe/netvaerk-teknik-og-miljoe/affaldsnetvaerk', status: 'forventet', basis: 'datoerne i 2026',
+  },
+  {
+    id: 'folkemoedet-2027', type: 'arr', date: '2027-06-17', end: '2027-06-19', org: 'Folkemødet', place: 'Allinge',
+    title: 'Folkemødet 2027', audience: 'Alle',
+    todo: 'I 2026 havde DAKOFA en scene om cirkulær økonomi, Cirkulær Scene, sammen med bl.a. ARI, BOFA og Dansk Producentansvar. Scenen for 2027 er ikke meldt ud.',
+    url: 'https://folkemoedet.dk/', status: 'bekraeftet',
   },
   {
     id: 'dakofa-aarskonf', type: 'arr', date: '2027-09-01', approx: true, org: 'DAKOFA',
@@ -766,6 +826,12 @@ const ITEMS = [
     url: 'https://cirkulaer.dk/arrangementer/genbrugspladskonference', status: 'forventet', basis: 'datoen i 2026',
   },
   {
+    id: 'kl-affaldsnet-3', type: 'arr', date: '2027-11-01', approx: true, org: 'KL',
+    title: 'KL\'s Affaldsnetværk, 3. møde', audience: 'Kommunernes medarbejdere på affaldsområdet', last: 'I 2026 var det 4. november, online.',
+    todo: 'Netværket mødes tre gange om året. Man skal tilmelde sig netværket på KL\'s side for at deltage.',
+    url: 'https://www.kl.dk/klima-og-erhverv/teknik-og-miljoe/netvaerk-teknik-og-miljoe/affaldsnetvaerk', status: 'forventet', basis: 'datoerne i 2026',
+  },
+  {
     id: 'ewwr-2027', type: 'arr', date: '2027-11-01', approx: true, org: 'EWWR', place: 'Lokale aktioner',
     title: 'Europæisk uge for affaldsreduktion 2027', audience: 'Kommuner, affaldsselskaber og borgere', last: 'I 2026 var det 21.-29. november.',
     todo: 'Tilmeldingen af aktioner åbner i september 2027.',
@@ -793,12 +859,12 @@ const PROPOSALS = [
     ],
   },
   {
-    label: 'Til manuel kontrol', found: 'Høringsportalen, 20. november 2026', conf: 'lav, ingen dato fundet',
-    title: 'Nye regler for affaldsforbrændingsanlæg m.fl. (høring 71634)',
+    label: 'Nye frister', found: 'Høringsportalen, 20. november 2026', conf: 'middel, står i et udkast',
+    title: 'Affaldsforbrænding: nye krav til overvågning af emissioner (høring 71634)',
     facts: [
       ['Kilde', '<a href="https://hoeringsportalen.dk/Hearing/Details/71634" target="_blank" rel="noopener">Høring om bl.a. godkendelses-, standardvilkårs- og affaldsforbrændingsbekendtgørelsen</a>'],
-      ['Fundet', 'Høringsfristen udløb 20. november 2026. Feedet nævner ingen dato for ikrafttræden.'],
-      ['Forslag', 'Læs høringsbrevet, og opret en frist for anlæggene, når datoen kendes.'],
+      ['Fundet', 'Bekendtgørelserne træder efter planen i kraft 1. februar 2027. Udkastets § 51 giver tilsynsmyndigheden frist til 1. juli 2027 for påbud til mindre anlæg.'],
+      ['Forslag', 'Opret to forventede frister, og ret dem, når bekendtgørelsen er udstedt.'],
     ],
   },
   {
@@ -822,8 +888,10 @@ const SOURCES = [
   { name: 'Dansk Producentansvar', how: 'RSS-feed', status: 'Feedet er tomt, tjek siden', ok: false },
   { name: 'DAKOFA', how: 'Sitemap og arrangementssider (intet RSS)', status: 'OK', ok: true },
   { name: 'Brancheforeningen Cirkulær', how: 'Arrangementsliste og sitemap', status: 'OK', ok: true },
-  { name: 'KL', how: 'Notat med konferencedatoer', status: 'OK', ok: true },
+  { name: 'KL', how: 'Konference- og netværkssider', status: 'OK', ok: true },
   { name: 'Verdis', how: 'Konferenceside', status: 'OK', ok: true },
+  { name: 'DI', how: 'Arrangementsside', status: 'OK', ok: true },
+  { name: 'Folkemødet', how: 'Forside', status: 'OK', ok: true },
   { name: 'Ferskvandscentret', how: 'Kursusoversigt (PDF)', status: 'OK', ok: true },
   { name: 'ISWA', how: 'iCal-feed', status: 'OK', ok: true },
   { name: 'Affaldsfeed', how: 'Datoer i nyhederne', status: 'OK', ok: true },
